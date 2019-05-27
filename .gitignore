@@ -1,8 +1,14 @@
+# Ignore pyc files
+__pycache__
+
 # Ignore vscode setting files
-.vscode
+*.vscode
+
+# Ignore jupyter cheskpoints
+*.ipynb_checkpoints
 
 # Ignore mac files
-.DS_Store
+*.DS_Store
 
 # Ignore data files
 __data__
