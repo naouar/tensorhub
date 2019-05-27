@@ -12,6 +12,7 @@ import tensorflow as tf
 
 from models import *
 
+
 class SequenceClassification():
     def __init__(self):
         pass
@@ -24,15 +25,11 @@ class SequenceClassification():
         
     def get_simple_gru(self, width=128, num_class=10, out_act="softmax"):
         return SimpleGRU(width, num_class, out_act)
+    
+    def get_mlp(self, width=128, num_class=10, out_act="softmax"):
+        return MLP(width, num_class, out_act)
 
 
-# Driver
-if __name__ == "__main__":
-    my_model = SequenceClassification().get_simple_lstm()
-    print(my_model)
-
-    my_model = SequenceClassification().get_simple_rnn()
-    print(my_model)
-
-    my_model = SequenceClassification().get_simple_gru()
-    print(my_model)
+class NamedEntityRecognition():
+    def __init__(self):
+        pass
