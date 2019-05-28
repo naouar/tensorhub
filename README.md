@@ -1,5 +1,5 @@
 # TensorMine
-**Models Implemented in TensorFlow 2.0-alpha**
+**Standard and State-Of-The-Art Models Implemented in TensorFlow 2.0-alpha**
 
 
 ### Sequential/Functional Interface
