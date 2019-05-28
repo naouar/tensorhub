@@ -2,7 +2,7 @@
 
 **Models Implemented in TensorFlow 2.0-alpha**
 
-
+### Sequential/Functional Interface
 The best place to start is with the user-friendly Sequential API. You can create models by plugging together building blocks. Run the “Hello World” example below, then visit the tutorials to learn more.
 
 ```
@@ -14,7 +14,7 @@ my_model = tf.keras.models.Sequential([
 ])
 ```
 
-
+### Subclassing Interface
 The Subclassing API provides a define-by-run interface for advanced research. Create a class for your model, then write the forward pass imperatively. Easily author custom layers, activations, and training loops. We will be using Subclassing to implement all models since it gives more control for advanced research.
 
 ```
