@@ -19,7 +19,6 @@ my_model = tf.keras.models.Sequential([
 The Subclassing API provides a define-by-run interface for advanced research. Create a class for your model, then write the forward pass imperatively. Easily author custom layers, activations, and training loops. We will be using Subclassing to implement all models since it gives more control for advanced research and ability to write custom layers, activations, losses, training loops etc.
 
 ```
-Example Model:
 class MyModel(tf.keras.Model):
     def __init__(self):
         super(MyModel, self).__init__()
