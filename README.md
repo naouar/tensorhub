@@ -12,6 +12,14 @@ my_model = tf.keras.models.Sequential([
     tf.keras.layers.Dropout(0.2),
     tf.keras.layers.Dense(10, activation='softmax')
 ])
+
+OR
+
+inputs = tf.keras.layers.Input(shape=(784,))
+x = tf.keras.layers.Dense(64, activation='relu')(inputs)
+x = tf.keras.layers.Dense(64, activation='relu')(x)
+predictions = Dense(10, activation='softmax')(x)
+my_model = tf.keras.models.Model(inputs=inputs, outputs=predictions)
 ```
 
 
