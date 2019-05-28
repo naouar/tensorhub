@@ -12,22 +12,7 @@ import tensorflow as tf
 from tensorflow.python.keras.api import keras
 
 
-class MLP(tf.keras.Model):
-    def __init__(self, width, num_class, out_act):
-        print("Initiated Multi-Layer Perceptron Model.")
-        super(MLP, self).__init__()
-        self.layer1 = keras.layers.Dense(units=width, activation="relu")
-        self.layer2 = keras.layers.Dense(units=width, activation="relu")
-        self.output_layer = keras.layers.Dense(units=num_class, activation=out_act)
-
-    def call(self, x):
-        x = self.layer1(x)
-        x = self.layer2(x)
-        x = self.output_layer(x)
-        return x
-
-
-class SimpleRNN(tf.keras.Model):
+class SimpleRNN(keras.Model):
     def __init__(self, max_features, width, num_class, out_act):
         print("Initiated SimpleRNN Model.")
         super(SimpleRNN, self).__init__()
@@ -44,7 +29,7 @@ class SimpleRNN(tf.keras.Model):
         return x
 
 
-class SimpleLSTM(tf.keras.Model):
+class SimpleLSTM(keras.Model):
     def __init__(self, max_features, width, num_class, out_act):
         print("Initiated SimpleLSTM Model.")
         super(SimpleLSTM, self).__init__()
@@ -61,7 +46,7 @@ class SimpleLSTM(tf.keras.Model):
         return x
 
 
-class SimpleGRU(tf.keras.Model):
+class SimpleGRU(keras.Model):
     def __init__(self, max_features, width, num_class, out_act):
         print("Initiated SimpleGRU Model.")
         super(SimpleGRU, self).__init__()
