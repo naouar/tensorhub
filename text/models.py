@@ -9,15 +9,16 @@ import os
 import sys
 import numpy as np
 import tensorflow as tf
+from tensorflow.python.keras.api import keras
 
 
 class MLP(tf.keras.Model):
     def __init__(self, width, num_class, out_act):
         print("Initiated Multi-Layer Perceptron Model.")
         super(MLP, self).__init__()
-        self.layer1 = tf.keras.layers.Dense(units=width, activation="relu")
-        self.layer2 = tf.keras.layers.Dense(units=width, activation="relu")
-        self.output_layer = tf.keras.layers.Dense(units=num_class, activation=out_act)
+        self.layer1 = keras.layers.Dense(units=width, activation="relu")
+        self.layer2 = keras.layers.Dense(units=width, activation="relu")
+        self.output_layer = keras.layers.Dense(units=num_class, activation=out_act)
 
     def call(self, x):
         x = self.layer1(x)
@@ -30,10 +31,10 @@ class SimpleRNN(tf.keras.Model):
     def __init__(self, max_features, width, num_class, out_act):
         print("Initiated SimpleRNN Model.")
         super(SimpleRNN, self).__init__()
-        self.embedding_layer = tf.keras.layers.Embedding(max_features, output_dim=2*width)
-        self.layer1 = tf.keras.layers.SimpleRNN(units=width, return_sequences=True)
-        self.layer2 = tf.keras.layers.SimpleRNN(units=width)
-        self.output_layer = tf.keras.layers.Dense(units=num_class, activation=out_act)
+        self.embedding_layer = keras.layers.Embedding(max_features, output_dim=2*width)
+        self.layer1 = keras.layers.SimpleRNN(units=width, return_sequences=True)
+        self.layer2 = keras.layers.SimpleRNN(units=width)
+        self.output_layer = keras.layers.Dense(units=num_class, activation=out_act)
     
     def call(self, x):
         x = self.embedding_layer(x)
@@ -47,10 +48,10 @@ class SimpleLSTM(tf.keras.Model):
     def __init__(self, max_features, width, num_class, out_act):
         print("Initiated SimpleLSTM Model.")
         super(SimpleLSTM, self).__init__()
-        self.embedding_layer = tf.keras.layers.Embedding(max_features, output_dim=2*width)
-        self.lstm_layer1 = tf.keras.layers.LSTM(units=width, return_sequences=True)
-        self.lstm_layer2 = tf.keras.layers.LSTM(units=width)
-        self.output_layer = tf.keras.layers.Dense(units=num_class, activation=out_act)
+        self.embedding_layer = keras.layers.Embedding(max_features, output_dim=2*width)
+        self.lstm_layer1 = keras.layers.LSTM(units=width, return_sequences=True)
+        self.lstm_layer2 = keras.layers.LSTM(units=width)
+        self.output_layer = keras.layers.Dense(units=num_class, activation=out_act)
     
     def call(self, x):
         x = self.embedding_layer(x)
@@ -64,10 +65,10 @@ class SimpleGRU(tf.keras.Model):
     def __init__(self, max_features, width, num_class, out_act):
         print("Initiated SimpleGRU Model.")
         super(SimpleGRU, self).__init__()
-        self.embedding_layer = tf.keras.layers.Embedding(max_features, output_dim=2*width)
-        self.layer1 = tf.keras.layers.GRU(units=width, return_sequences=True)
-        self.layer2 = tf.keras.layers.GRU(units=width)
-        self.output_layer = tf.keras.layers.Dense(units=num_class, activation=out_act)
+        self.embedding_layer = keras.layers.Embedding(max_features, output_dim=2*width)
+        self.layer1 = keras.layers.GRU(units=width, return_sequences=True)
+        self.layer2 = keras.layers.GRU(units=width)
+        self.output_layer = keras.layers.Dense(units=num_class, activation=out_act)
     
     def call(self, x):
         x = self.embedding_layer(x)

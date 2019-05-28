@@ -9,16 +9,17 @@ import os
 import sys
 import numpy as np
 import tensorflow as tf
+from tensorflow.python.keras.api import keras
 
 from driver import SequenceClassification
 
 
 def text_classifier_on_imdb():
     # Load MNIST data
-    (x_train, y_train), (x_test, y_test) = tf.keras.datasets.imdb.load_data()
+    (x_train, y_train), (x_test, y_test) = keras.datasets.imdb.load_data()
 
     # A dictionary mapping words to an integer index
-    word_index = tf.keras.datasets.imdb.get_word_index()
+    word_index = keras.datasets.imdb.get_word_index()
 
     # The first indices are reserved
     word_index = {k:(v+3) for k, v in word_index.items()}
@@ -28,14 +29,14 @@ def text_classifier_on_imdb():
     word_index["<UNUSED>"] = 3
 
     # Pad sequence for fixed length input
-    x_train = tf.keras.preprocessing.sequence.pad_sequences(
+    x_train = keras.preprocessing.sequence.pad_sequences(
         x_train,
         value=word_index["<PAD>"],
         padding="post",
         maxlen=256
     )
 
-    x_test = tf.keras.preprocessing.sequence.pad_sequences(
+    x_test = keras.preprocessing.sequence.pad_sequences(
         x_test,
         value=word_index["<PAD>"],
         padding="post",
@@ -53,16 +54,17 @@ def text_classifier_on_imdb():
     my_model = SequenceClassification().get_simple_lstm(max_features=len(word_index), width=512, num_class=1, out_act="sigmoid")
 
     # Model configuration
-    loss_function = tf.keras.losses.BinaryCrossentropy()
-    optimizer = tf.keras.optimizers.Adam()
+    loss_function = keras.losses.BinaryCrossentropy()
+    optimizer = keras.optimizers.Adam()
 
     # Accumulate the values over epochs and then print the overall result
-    train_loss = tf.keras.metrics.Mean(name="train_loss")
-    train_accuracy = tf.keras.metrics.CategoricalAccuracy(name="train_accuracy")
-    test_loss = tf.keras.metrics.Mean(name="test_loss")
-    test_accuracy = tf.keras.metrics.CategoricalAccuracy(name="test_accuracy")
+    train_loss = keras.metrics.Mean(name="train_loss")
+    train_accuracy = keras.metrics.CategoricalAccuracy(name="train_accuracy")
+    test_loss = keras.metrics.Mean(name="test_loss")
+    test_accuracy = keras.metrics.CategoricalAccuracy(name="test_accuracy")
 
     # Train model
+    @tf.function()
     def train_step(text, labels):
         # Use gradient tape for training the model
         with tf.GradientTape() as tape:
@@ -78,6 +80,7 @@ def text_classifier_on_imdb():
         train_accuracy(labels, predictions)
     
     # Test model
+    @tf.function()
     def test_step(text, labels):
         # Get predictions
         predictions = my_model(text)
