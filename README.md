@@ -24,7 +24,7 @@ my_model = tf.keras.models.Model(inputs=inputs, outputs=predictions)
 
 
 ### Subclassing Interface
-The Subclassing API provides a define-by-run interface for advanced research. Create a class for your model, then write the forward pass imperatively. Easily author custom layers, activations, and training loops. We will be using Subclassing to implement all models since it gives more control for advanced research and ability to write custom layers, activations, losses, training loops etc.
+The Subclassing API provides a define-by-run interface for advanced research. Create a class for your model, then write the forward pass imperatively. Easily **author custom layers**, **activations**, **training loop** and much more. We will be using Subclassing to implement all models since it gives more control for advanced research.
 
 ```
 class MyModel(tf.keras.Model):
