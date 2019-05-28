@@ -17,16 +17,16 @@ class SequenceClassification():
     def __init__(self):
         pass
 
-    def get_simple_rnn(self, width=128, num_class=10, out_act="softmax"):
-        return SimpleRNN(width, num_class, out_act)
+    def get_simple_rnn(self, max_features, width, num_class, out_act):
+        return SimpleRNN(max_features, width, num_class, out_act)
 
-    def get_simple_lstm(self, width=128, num_class=10, out_act="softmax"):
-        return SimpleLSTM(width=128, num_class=10, out_act="softmax")
+    def get_simple_lstm(self, max_features, width, num_class, out_act):
+        return SimpleLSTM(max_features, width, num_class, out_act)
         
-    def get_simple_gru(self, width=128, num_class=10, out_act="softmax"):
-        return SimpleGRU(width, num_class, out_act)
+    def get_simple_gru(self, max_features, width, num_class, out_act):
+        return SimpleGRU(max_features, width, num_clas, out_act)
     
-    def get_mlp(self, width=128, num_class=10, out_act="softmax"):
+    def get_mlp(self, width, num_class, out_act):
         return MLP(width, num_class, out_act)
 
 
