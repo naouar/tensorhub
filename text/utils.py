@@ -36,7 +36,3 @@ def load_embedding(filepath, dim, word_index):
         if embedding_vector is not None:
             embedding_matrix[i] = embedding_vector
     return embedding_matrix
-
-
-if __name__ == "__main__":
-    # load_embedding("/Users/nityansuman/__embeddings__/glove.6B.50d.txt", dim=50)
