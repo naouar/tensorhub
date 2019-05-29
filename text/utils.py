@@ -6,9 +6,68 @@
 
 # Load packages
 import os
-import sys
 import re
+import sys
 import numpy as np
+import pandas as pd
+
+
+class data_loader:
+    """Template class for data loaders.
+    
+    Returns:
+        DataFrame -- Returns a df object.
+    """
+    def __init__(self):
+        print("Initiated Data Loader!")
+
+    @staticmethod
+    def load_json(filepath):
+        """Static method to load JSON data into DF objct.
+        
+        Arguments:
+            filepath {String} -- JSON file path.
+        
+        Returns:
+            DataFrame -- Returns a DF object.
+        """
+        df = pd.read_json(filepath, orient="records", encoding="utf-8", lines=True)
+        return df
+    
+    @staticmethod
+    def load_csv(filepath):
+        """Static method to load CSV data into DF objct.
+        
+        Arguments:
+            filepath {String} -- CSV file path.
+        
+        Returns:
+            DataFrame -- Returns a DF object.
+        """
+        df = pd.read_csv(filepath, encoding="utf-8")
+        return df
+    
+    @staticmethod
+    def load_tsv(filepath):
+        """Static method to load TSV data into DF objct.
+        
+        Arguments:
+            filepath {String} -- TSV file path.
+        
+        Returns:
+            DataFrame -- Returns a DF object.
+        """
+        df = pd.read_csv(filepath, encoding="utf-8", sep="\t")
+        return df
+
+
+def create_voabulary(list_text):
+    """Method to create word-index mapping.
+    
+    Arguments:
+        list_text {List} -- A list of strings from which word-index mapping is created. Generally it is the entire corpus of text available.
+    """
+    pass
 
 
 def load_embedding(filepath, dim, word_index):
