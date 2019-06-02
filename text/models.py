@@ -13,16 +13,16 @@ from tensorflow.python.keras.api import keras
 
 
 class SimpleRNN(keras.Model):
-    def __init__(self, max_length, vocab_size, num_classes, num_nodes, activation, learn_embedding, embedding_matrix):
+    def __init__(self, vocab_size, num_classes, max_length, num_nodes, activation, output_activation, learn_embedding, embedding_matrix):
         print("Initiated SimpleRNN Model.")
         super(SimpleRNN, self).__init__()
         if learn_embedding == True:
             self.embedding_layer = keras.layers.Embedding(input_dim=vocab_size, output_dim=num_nodes, weights=[embedding_matrix], trainable=False, input_length=max_length)
         else:
             self.embedding_layer = keras.layers.Embedding(input_dim=vocab_size, output_dim=num_nodes, input_length=max_length)
-        self.layer1 = keras.layers.SimpleRNN(units=num_nodes, return_sequences=True)
-        self.layer2 = keras.layers.SimpleRNN(units=num_nodes)
-        self.output_layer = keras.layers.Dense(units=num_classes, activation=activation)
+        self.layer1 = keras.layers.SimpleRNN(units=num_nodes, return_sequences=True, activation=activation)
+        self.layer2 = keras.layers.SimpleRNN(units=num_nodes, activation=activation)
+        self.output_layer = keras.layers.Dense(units=num_classes, activation=output_activation)
     
     def call(self, x):
         x = self.embedding_layer(x)
@@ -33,16 +33,16 @@ class SimpleRNN(keras.Model):
 
 
 class SimpleLSTM(keras.Model):
-    def __init__(self, max_length, vocab_size, num_classes, num_nodes, activation, learn_embedding, embedding_matrix):
+    def __init__(self, vocab_size, num_classes, max_length, num_nodes, activation, output_activation, learn_embedding, embedding_matrix):
         print("Initiated SimpleLSTM Model.")
         super(SimpleLSTM, self).__init__()
-        if learn_embedding == True:
+        if learn_embedding == False:
             self.embedding_layer = keras.layers.Embedding(input_dim=vocab_size, output_dim=num_nodes, weights=[embedding_matrix], trainable=False, input_length=max_length)
         else:
-            self.embedding_layer = keras.layers.Embedding(input_dim=vocab_size, output_dim=num_nodes, input_length=max_length)
-        self.lstm_layer1 = keras.layers.LSTM(units=num_nodes, return_sequences=True)
-        self.lstm_layer2 = keras.layers.LSTM(units=num_nodes)
-        self.output_layer = keras.layers.Dense(units=num_classes, activation=activation)
+            self.embedding_layer = keras.layers.Embedding(input_dim=vocab_size, output_dim=num_nodes, input_length=max_length, mask_zero=True)
+        self.lstm_layer1 = keras.layers.LSTM(units=num_nodes, return_sequences=True, activation=activation)
+        self.lstm_layer2 = keras.layers.LSTM(units=num_nodes, activation=activation)
+        self.output_layer = keras.layers.Dense(units=num_classes, activation=output_activation)
     
     def call(self, x):
         x = self.embedding_layer(x)
@@ -53,16 +53,16 @@ class SimpleLSTM(keras.Model):
 
 
 class SimpleGRU(keras.Model):
-    def __init__(self, max_length, vocab_size, num_classes, num_nodes, activation, learn_embedding, embedding_matrix):
+    def __init__(self, vocab_size, num_classes, max_length, num_nodes, activation, output_activation, learn_embedding, embedding_matrix):
         print("Initiated SimpleGRU Model.")
         super(SimpleGRU, self).__init__()
         if learn_embedding == True:
             self.embedding_layer = keras.layers.Embedding(input_dim=vocab_size, output_dim=num_nodes, weights=[embedding_matrix], trainable=False, input_length=max_length)
         else:
             self.embedding_layer = keras.layers.Embedding(input_dim=vocab_size, output_dim=num_nodes, input_length=max_length)
-        self.layer1 = keras.layers.GRU(units=num_nodes, return_sequences=True)
-        self.layer2 = keras.layers.GRU(units=num_nodes)
-        self.output_layer = keras.layers.Dense(units=num_classes, activation=activation)
+        self.layer1 = keras.layers.GRU(units=num_nodes, return_sequences=True, activation=activation)
+        self.layer2 = keras.layers.GRU(units=num_nodes, activation=activation)
+        self.output_layer = keras.layers.Dense(units=num_classes, activation=output_activation)
     
     def call(self, x):
         x = self.embedding_layer(x)
