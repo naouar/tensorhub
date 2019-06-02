@@ -1,6 +1,7 @@
 # TensorMine
 **Standard and State-Of-The-Art Models Implemented in TensorFlow 2.0-alpha**
 
+![TensorMine](header.png)
 
 ### Sequential/Functional Interface
 The best place to start is with the user-friendly Sequential API. You can create models by plugging together building blocks. Run the “Hello World” example below, then visit the tutorials to learn more.
