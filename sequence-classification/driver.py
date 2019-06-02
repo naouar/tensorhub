@@ -24,6 +24,5 @@ class SequenceClassification():
     def get_simple_gru(self, vocab_size, num_classes, max_length=512, num_nodes=512, output_activation="softmax", activation=None, learn_embedding=True, embedding_matrix=None):
         return SimpleGRU(max_length, vocab_size, num_classes, num_nodes, activation, learn_embedding, embedding_matrix)
 
-class NamedEntityRecognition():
-    def __init__(self):
-        pass
+    def get_text_cnn(self, vocab_size, num_classes, max_length=512, num_nodes=1024, num_filter=128, kernal_size=3, stride=1, dropout_rate=0.4, activation="relu", output_activation="softmax", learn_embedding=True, embedding_matrix=None):
+        return TextCNN(vocab_size, num_classes, max_length, num_nodes, num_filter, kernal_size, stride, dropout_rate, activation, output_activation, learn_embedding, embedding_matrix)
