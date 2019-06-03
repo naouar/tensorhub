@@ -71,6 +71,7 @@ class SimpleGRU(keras.Model):
         x = self.output_layer(x)
         return x
 
+
 class TextCNN(keras.Model):
     def __init__(self, vocab_size, num_classes, max_length, num_nodes, num_filter, kernal_size, stride, dropout_rate, activation, output_activation, learn_embedding, embedding_matrix):
         print("Initiated TextCNN Model.")
