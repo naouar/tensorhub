@@ -62,15 +62,17 @@ class data_loader:
         return df
 
 
-def create_tokenizer(text_data):
+def create_embeddings(text_data, type_embedding):
     """Method to create a tokenizer and generate word vocabulary.
     
     Arguments:
         text_data {List} -- A list of strings from which word-index mapping is created. Generally it is the entire corpus of text available.
     """
     # Create a custom tokenizer
-    tokenizer = keras.preprocessing.text.Tokenizer()
-
+    if type_embedding.lower() == "word":
+        tokenizer = keras.preprocessing.text.Tokenizer(char_level=False, oov_token="<UNK>")
+    else:
+        tokenizer = keras.preprocessing.text.Tokenizer(char_level=True, oov_token="<UNK>")
     # Fit tokenizer on the corpus
     tokenizer.fit_on_texts(text_data)
 
@@ -80,13 +82,6 @@ def create_tokenizer(text_data):
     # Restructure the word_index and save other members
     # Shift everything by 3
     # Original mapping starts from 1
-    word_index = {k:(v+3) for k, v in word_index.items()}
-    word_index["<PAD>"] = 0
-    word_index["<START>"] = 1
-    word_index["<UNK>"] = 2
-    word_index["<END>"] = 3
-    print("Number of unique tokens in vocabulary are:", len(word_index) + 1) # 116618 + 4
-    
     return tokenizer, word_index
 
 
