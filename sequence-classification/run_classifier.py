@@ -14,12 +14,13 @@ from tensorflow.python.keras.api import keras
 from sklearn.model_selection import train_test_split
 
 from driver import SequenceClassification
-from utils import data_loader, load_embedding, create_tokenizer
+from utils import data_loader, load_embedding, create_embeddings
 
 
 
 """Multiclass Text classification on 'News Healines' dataset."""
 
+# DATA PREPARATION
 # News categorization dataset
 filepath = "~/__data__/news-category.json"
 
@@ -49,7 +50,7 @@ corpus.extend(x_test)
 max_num_words = len(max(corpus).split())
 
 # Train a custom tokenier on the corpus and generate tokenizer instance and word vocabulary
-tokenizer, word_index = create_tokenizer(corpus)
+tokenizer, word_index = create_embeddings(corpus, type_embedding="word") # Options: 'word' and 'char'
 
 # Tokenize data using the created tokenizer
 x_train = tokenizer.texts_to_sequences(x_train)
@@ -58,7 +59,7 @@ x_test = tokenizer.texts_to_sequences(x_test)
 # Pad or truncate sequences to make fixed length input
 x_train = keras.preprocessing.sequence.pad_sequences(
     x_train,
-    value=word_index["<PAD>"],
+    value=0, # Pad with 0
     padding="post",
     truncating="post",
     maxlen=max_num_words
@@ -66,7 +67,7 @@ x_train = keras.preprocessing.sequence.pad_sequences(
 
 x_test = keras.preprocessing.sequence.pad_sequences(
     x_test,
-    value=word_index["<PAD>"],
+    value=0, # Pad with 0
     padding="post",
     truncating="post",
     maxlen=max_num_words
@@ -78,20 +79,16 @@ x_test = x_test.astype(np.float32)
 
 # Get all class labels
 classes = np.unique(y_train)
+
 # Generate a unique index for each class
 index = range(len(classes))
+
 # Create class to index mapping
 class_index = dict(zip(classes, index))
 
-def numerify(labels):
-    numerified_labels = list()
-    for label in labels:
-        numerified_labels.append(class_index[label])
-    return numerified_labels
-
 # Now encode labels using the created mapping
-y_train = numerify(y_train)
-y_test = numerify(y_test)
+y_train = [class_index[label] for label in y_train]
+y_test = [class_index[label] for label in y_test]
 
 # Convert integer encoded labels into categorical
 y_train = keras.utils.to_categorical(y_train, num_classes=len(classes))
@@ -101,6 +98,7 @@ y_test = keras.utils.to_categorical(y_test, num_classes=len(classes))
 train_ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(32)
 test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(32)
 
+# DEFINE MODEL
 # Load model architecture and set your configuration
 sequence_classifier = SequenceClassification()
 my_model = sequence_classifier.get_simple_lstm(
@@ -125,6 +123,7 @@ train_accuracy = keras.metrics.CategoricalAccuracy(name="train_accuracy")
 test_loss = keras.metrics.Mean(name="test_loss")
 test_accuracy = keras.metrics.CategoricalAccuracy(name="test_accuracy")
 
+# DEFINE EXECUTION CONFIGURATION
 # Train model using a tensor function
 @tf.function()
 def train_step(text, labels):
@@ -159,13 +158,13 @@ template = "Epoch {}, Loss: {}, Accuracy: {}, Test Loss: {}, Test Accuracy: {}"
 # Run
 print("{:#^50s}".format("Train and Validate"))
 for epoch in range(epochs):
-    print("Epoch {}/{}".format(epoch, epochs))
+    print("Epoch {}/{}".format(epoch, epochs-1))
     # Run model on batches
-    for text, label in train_ds:
-        train_step(text, label)
+    for text, labels in train_ds:
+        train_step(text, labels)
     # Test model on batches    
-    for t_text, t_label in test_ds:
-        test_step(t_text, t_label)
+    for t_text, t_labels in test_ds:
+        test_step(t_text, t_labels)
     # Prompt user using defined template
     print(template.format(epoch+1, \
         train_loss.result(), train_accuracy.result()*100, \
