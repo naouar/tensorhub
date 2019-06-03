@@ -46,11 +46,12 @@ corpus = list()
 corpus.extend(x_train)
 corpus.extend(x_test)
 
-# Compute the maximum number of words in a sequence
+# Compute the maximum number of words and characters in a sequence
 max_num_words = len(max(corpus).split())
+max_num_chars = len(max(corpus))
 
 # Train a custom tokenier on the corpus and generate tokenizer instance and word vocabulary
-tokenizer, word_index = create_embeddings(corpus, type_embedding="word") # Options: 'word' and 'char'
+tokenizer, word_index = create_embeddings(corpus, type_embedding="word") # Options: 'word', 'char'
 
 # Tokenize data using the created tokenizer
 x_train = tokenizer.texts_to_sequences(x_train)
@@ -62,7 +63,7 @@ x_train = keras.preprocessing.sequence.pad_sequences(
     value=0, # Pad with 0
     padding="post",
     truncating="post",
-    maxlen=max_num_words
+    maxlen=max_num_words # When using 'char' embedding use max_num_chars
 )
 
 x_test = keras.preprocessing.sequence.pad_sequences(
@@ -70,7 +71,7 @@ x_test = keras.preprocessing.sequence.pad_sequences(
     value=0, # Pad with 0
     padding="post",
     truncating="post",
-    maxlen=max_num_words
+    maxlen=max_num_words # When using 'char' embedding use max_num_chars
 )
 
 # Convert data type to float from int
