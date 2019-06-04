@@ -154,7 +154,7 @@ def test_step(text, labels):
 
 # Set run configuration
 epochs = 2
-template = "Epoch {}, Loss: {}, Accuracy: {}, Test Loss: {}, Test Accuracy: {}"
+template = "Epoch {}, Loss: {}, Accuracy: {}%, Test Loss: {}, Test Accuracy: {}%"
 
 # Run
 print("{:#^50s}".format("Train and Validate"))

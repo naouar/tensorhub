@@ -66,12 +66,15 @@ def create_embeddings(text_data, type_embedding):
     """Method to create a tokenizer and generate word vocabulary.
     
     Arguments:
-        text_data {List} -- A list of strings from which word-index mapping is created. Generally it is the entire corpus of text available.
+        text_data {List} -- A list of strings from which word-index or char-index mapping is created. \
+            Generally it is the entire corpus of text available.
     """
     # Create a custom tokenizer
     if type_embedding.lower() == "word":
+        # Word embeddings
         tokenizer = keras.preprocessing.text.Tokenizer(char_level=False, oov_token="<UNK>")
     else:
+        # Character embeddings
         tokenizer = keras.preprocessing.text.Tokenizer(char_level=True, oov_token="<UNK>")
     # Fit tokenizer on the corpus
     tokenizer.fit_on_texts(text_data)
