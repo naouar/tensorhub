@@ -14,4 +14,4 @@ __pycache__
 __data__
 
 # Ignore model weights
-__model__
+__models__
