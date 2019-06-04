@@ -54,8 +54,8 @@ max_num_chars = len(max(corpus))
 tokenizer, word_index = create_embeddings(corpus, type_embedding="word") # Options: 'word', 'char'
 
 # Tokenize data using the created tokenizer
-x_train = tokenizer.texts_to_sequences(x_train)
-x_test = tokenizer.texts_to_sequences(x_test)
+x_train = tokenizer.texts_to_sequences(x_train[:100])
+x_test = tokenizer.texts_to_sequences(x_test[:100])
 
 # Pad or truncate sequences to make fixed length input
 x_train = keras.preprocessing.sequence.pad_sequences(
@@ -86,16 +86,18 @@ index = range(len(classes))
 
 # Create class to index mapping
 class_index = dict(zip(classes, index))
+reverse_class_index = dict(zip(index, classes))
 
 # Now encode labels using the created mapping
 y_train = [class_index[label] for label in y_train]
 y_test = [class_index[label] for label in y_test]
 
 # Convert integer encoded labels into categorical
-y_train = keras.utils.to_categorical(y_train, num_classes=len(classes))
-y_test = keras.utils.to_categorical(y_test, num_classes=len(classes))
+y_train = keras.utils.to_categorical(y_train[:100], num_classes=len(classes))
+y_test = keras.utils.to_categorical(y_test[:100], num_classes=len(classes))
 
-# Create batch datasets: batches of 32 for train and 64 for test
+# Create batch datasets: batches of 32 for train and 32 for test
+# For production i.e., to work with SavedModel use batch size of 1 for both
 train_ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(32)
 test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(32)
 
@@ -153,13 +155,13 @@ def test_step(text, labels):
     test_accuracy(labels, predictions)
 
 # Set run configuration
-epochs = 2
+epochs = 1
 template = "Epoch {}, Loss: {}, Accuracy: {}%, Test Loss: {}, Test Accuracy: {}%"
 
 # Run
 print("{:#^50s}".format("Train and Validate"))
-for epoch in range(epochs):
-    print("Epoch {}/{}".format(epoch, epochs-1))
+for epoch in range(1, epochs+1):
+    print("Epoch {}/{}".format(epoch, epochs))
     # Run model on batches
     for text, labels in train_ds:
         train_step(text, labels)
@@ -170,3 +172,40 @@ for epoch in range(epochs):
     print(template.format(epoch+1, \
         train_loss.result(), train_accuracy.result()*100, \
         test_loss.result(), test_accuracy.result()*100))
+
+# A SavedModel contains a complete TensorFlow program, including weights and computation
+# It does not require the original model building code to run
+# It makes it useful for sharing or deploying (with TFLite, TensorFlow.js, TensorFlow Serving, or TFHub)
+# Here /1 is the version number. Naming convention must be followed
+tf.saved_model.save(my_model, "__models__/simple_lstm_model/1/")
+
+
+"""Run inference from the saved model."""
+
+# Load saved model
+loaded = tf.saved_model.load("__models__/simple_lstm_model/1/")
+
+# SavedModels have named functions called signatures
+# Keras models export their forward pass under the serving_default signature key
+# The SavedModel command line interface is useful for inspecting SavedModels on disk
+print(list(loaded.signatures.keys()))  # ['serving_default']
+
+# Define inference call
+inference = loaded.signatures["serving_default"]
+
+# Get possible outputs
+print(inference.structured_outputs) # {'output_1': TensorSpec(shape=(32, 41), dtype=tf.float32, name='output_1')}
+
+# Run demo on a sample x_test[0], y_test[0]
+
+x = np.asarray(x_test[0]).reshape(1, len(x_test[0]))
+x = x.astype(np.float32)
+# Get predictions
+# As it can be seen above, model has one output
+labeling = inference(tf.constant(x))
+
+# pass input sample and output name
+predicted_id = np.argmax(labeling)
+
+print("Original Label:", reverse_class_index[np.argmax(y_test[0])])
+print("Predicted Label:", reverse_class_index[predicted_id])
