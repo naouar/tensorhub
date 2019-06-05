@@ -98,8 +98,8 @@ y_test = keras.utils.to_categorical(y_test[:100], num_classes=len(classes))
 
 # Create batch datasets: batches of 32 for train and 32 for test
 # For production i.e., to work with SavedModel use batch size of 1 for both
-train_ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(32)
-test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(32)
+train_ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(1)
+test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(1)
 
 # DEFINE MODEL
 # Load model architecture and set your configuration
