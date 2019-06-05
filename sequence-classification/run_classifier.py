@@ -196,16 +196,14 @@ inference = loaded.signatures["serving_default"]
 # Get possible outputs
 print(inference.structured_outputs) # {'output_1': TensorSpec(shape=(32, 41), dtype=tf.float32, name='output_1')}
 
-# Run demo on a sample x_test[0], y_test[0]
-
+# Reshape your processed input
 x = np.asarray(x_test[0]).reshape(1, len(x_test[0]))
 x = x.astype(np.float32)
-# Get predictions
-# As it can be seen above, model has one output
-labeling = inference(tf.constant(x))
 
-# pass input sample and output name
+# Get predictions
+labeling = inference(tf.constant(x))
 predicted_id = np.argmax(labeling)
 
 print("Original Label:", reverse_class_index[np.argmax(y_test[0])])
 print("Predicted Label:", reverse_class_index[predicted_id])
+
