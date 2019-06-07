@@ -1,5 +1,5 @@
 # TensorMine
-**Models Implemented in TensorFlow 2.0-alpha**
+**Models Implemented in TensorFlow 2.0-alpha** (*Under active development.*)
 
 The core open source library to help you develop and train ML models.
 
