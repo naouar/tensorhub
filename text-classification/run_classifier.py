@@ -13,14 +13,12 @@ import tensorflow as tf
 from tensorflow.python.keras.api import keras
 from sklearn.model_selection import train_test_split
 
-from driver import SequenceClassification
+import models
 from utils import data_loader, load_embedding, create_embeddings
-
 
 
 """Multiclass Text classification on 'News Healines' dataset."""
 
-# DATA PREPARATION
 # News categorization dataset
 filepath = "~/__data__/news-category.json"
 
@@ -51,7 +49,7 @@ max_num_words = len(max(corpus).split())
 max_num_chars = len(max(corpus))
 
 # Train a custom tokenier on the corpus and generate tokenizer instance and word vocabulary
-tokenizer, word_index = create_embeddings(corpus, type_embedding="word") # Options: 'word', 'char'
+tokenizer, word_index = create_embeddings(corpus, type_embedding="word") # Options: 'word', 'char' & 'both' (not supported by all model)
 
 # Tokenize data using the created tokenizer
 x_train = tokenizer.texts_to_sequences(x_train[:100])
@@ -98,10 +96,9 @@ y_test = keras.utils.to_categorical(y_test[:100], num_classes=len(classes))
 
 # Create batch datasets: batches of 32 for train and 32 for test
 # For production i.e., to work with SavedModel use batch size of 1 for both
-train_ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(1)
-test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(1)
+train_ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(32)
+test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(32)
 
-# DEFINE MODEL
 # Load model architecture and set your configuration
 sequence_classifier = SequenceClassification()
 my_model = sequence_classifier.get_simple_lstm(
@@ -118,6 +115,7 @@ my_model = sequence_classifier.get_simple_lstm(
 # Define model configuration
 loss_function = keras.losses.CategoricalCrossentropy()
 
+# Define optimizer
 optimizer = keras.optimizers.RMSprop()
 
 # Accumulate performance metrics while training
@@ -126,7 +124,6 @@ train_accuracy = keras.metrics.CategoricalAccuracy(name="train_accuracy")
 test_loss = keras.metrics.Mean(name="test_loss")
 test_accuracy = keras.metrics.CategoricalAccuracy(name="test_accuracy")
 
-# DEFINE EXECUTION CONFIGURATION
 # Train model using a tensor function
 @tf.function()
 def train_step(text, labels):
@@ -177,33 +174,36 @@ for epoch in range(1, epochs+1):
 # It does not require the original model building code to run
 # It makes it useful for sharing or deploying (with TFLite, TensorFlow.js, TensorFlow Serving, or TFHub)
 # Here /1 is the version number. Naming convention must be followed
+# For production i.e., to work with SavedModel use batch size of 1 for both or else inputs should match batch size
 tf.saved_model.save(my_model, "__models__/simple_lstm_model/1/")
 
 
-"""Run inference from the saved model."""
+def inference():
+    """Run inference from the saved model."""
+    # Load saved model
+    loaded = tf.saved_model.load("__models__/simple_lstm_model/1/")
 
-# Load saved model
-loaded = tf.saved_model.load("__models__/simple_lstm_model/1/")
+    # SavedModels have named functions called signatures
+    # Keras models export their forward pass under the serving_default signature key
+    # The SavedModel command line interface is useful for inspecting SavedModels on disk
+    print(list(loaded.signatures.keys()))  # ['serving_default']
 
-# SavedModels have named functions called signatures
-# Keras models export their forward pass under the serving_default signature key
-# The SavedModel command line interface is useful for inspecting SavedModels on disk
-print(list(loaded.signatures.keys()))  # ['serving_default']
+    # Define inference call
+    inference = loaded.signatures["serving_default"]
 
-# Define inference call
-inference = loaded.signatures["serving_default"]
+    # Get possible outputs
+    print(inference.structured_outputs) # {'output_1': TensorSpec(shape=(32, 41), dtype=tf.float32, name='output_1')}
 
-# Get possible outputs
-print(inference.structured_outputs) # {'output_1': TensorSpec(shape=(32, 41), dtype=tf.float32, name='output_1')}
+    # Reshape your processed input
+    x = np.asarray(x_test[0]).reshape(1, len(x_test[0]))
+    x = x.astype(np.float32)
 
-# Reshape your processed input
-x = np.asarray(x_test[0]).reshape(1, len(x_test[0]))
-x = x.astype(np.float32)
+    # Get predictions
+    labeling = inference(tf.constant(x))
+    predicted_id = np.argmax(labeling)
 
-# Get predictions
-labeling = inference(tf.constant(x))
-predicted_id = np.argmax(labeling)
+    print("Original Label:", reverse_class_index[np.argmax(y_test[0])])
+    print("Predicted Label:", reverse_class_index[predicted_id])
 
-print("Original Label:", reverse_class_index[np.argmax(y_test[0])])
-print("Predicted Label:", reverse_class_index[predicted_id])
-
+# Call inference
+inference()
