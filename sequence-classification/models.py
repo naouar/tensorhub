@@ -76,7 +76,7 @@ class TextCNN(keras.Model):
     def __init__(self, vocab_size, num_classes, max_length, num_nodes, num_filter, kernal_size, stride, dropout_rate, activation, output_activation, learn_embedding, embedding_matrix):
         print("Initiated TextCNN Model.")
         super(TextCNN, self).__init__()
-        if learn_embedding == True:
+        if learn_embedding == False:
             self.embedding_layer = keras.layers.Embedding(input_dim=vocab_size, output_dim=num_nodes, weights=[embedding_matrix], trainable=False, input_length=max_length)
         else:
             self.embedding_layer = keras.layers.Embedding(input_dim=vocab_size, output_dim=num_nodes, input_length=max_length)
