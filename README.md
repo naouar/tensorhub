@@ -1,7 +1,7 @@
 # TensorMine
 **Models Implemented in TensorFlow 2.0-alpha** (*Under active development.*)
 
-The core open source library to help you develop and train ML models.
+The core open source library to help you develop and train ML models easy and fast as never before.
 
 ![TensorMine](header.png)
 
@@ -38,7 +38,7 @@ x = tf.keras.layers.Dense(64, activation='relu')(x)
 predictions = Dense(10, activation='softmax')(x)
 my_model = tf.keras.models.Model(inputs=inputs, outputs=predictions)
 ```
-
+- - - -
 
 **Subclassing Interface**
 The Subclassing API provides a define-by-run interface for advanced research. Create a class for your model, then write the forward pass imperatively. Easily **author custom layers**, **activations**, **training loop** and much more.
