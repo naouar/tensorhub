@@ -13,8 +13,8 @@ import tensorflow as tf
 from tensorflow.python.keras.api import keras
 from sklearn.model_selection import train_test_split
 
-from models import * # Import all models
-from utils import data_loader, load_embedding, create_embeddings
+from standard_models import SimpleRNN, SimpleLSTM, SimpleLSTM, TextCNN
+from utils import data_loader, Embeddings
 
 
 """Multiclass Text classification on 'News Healines' dataset."""
@@ -49,11 +49,11 @@ max_num_words = len(max(corpus).split())
 max_num_chars = len(max(corpus))
 
 # Train a custom tokenier on the corpus and generate tokenizer instance and word vocabulary
-tokenizer, word_index = create_embeddings(corpus, type_embedding="word") # Options: 'word', 'char' & 'both' (not supported by all model)
+tokenizer, word_index = Embeddings.create_embeddings(corpus, type_embedding="word") # Options: 'word', 'char' & 'both' (not supported by all model)
 
 # Tokenize data using the created tokenizer
-x_train = tokenizer.texts_to_sequences(x_train[:100])
-x_test = tokenizer.texts_to_sequences(x_test[:100])
+x_train = tokenizer.texts_to_sequences(x_train)
+x_test = tokenizer.texts_to_sequences(x_test)
 
 # Pad or truncate sequences to make fixed length input
 x_train = keras.preprocessing.sequence.pad_sequences(
@@ -91,9 +91,8 @@ y_train = [class_index[label] for label in y_train]
 y_test = [class_index[label] for label in y_test]
 
 # Convert integer encoded labels into categorical
-y_train = keras.utils.to_categorical(y_train[:100], num_classes=len(classes))
-y_test = keras.utils.to_categorical(y_test[:100
-], num_classes=len(classes))
+y_train = keras.utils.to_categorical(y_train, num_classes=len(classes))
+y_test = keras.utils.to_categorical(y_test, num_classes=len(classes))
 
 # # Load model architecture with its default settings
 # # RNN model
@@ -103,11 +102,11 @@ y_test = keras.utils.to_categorical(y_test[:100
 #     num_classes=len(classes),
 # )
 
-# # LSTM model
-# model = SimpleLSTM(
-#     vocab_size=len(word_index) + 1,
-#     num_classes=len(classes),
-# )
+# LSTM model
+model = SimpleLSTM(
+    vocab_size=len(word_index) + 1,
+    num_classes=len(classes),
+)
 
 # # OR Call a model with custom configuration
 # # GRU model
@@ -123,21 +122,21 @@ y_test = keras.utils.to_categorical(y_test[:100
 #     embedding_matrix=None
 # )
 
-# Text-CNN model
-model = TextCNN(
-    vocab_size=len(word_index)+1,
-    num_classes=len(classes),
-    filters=[64, 64],
-    kernals=[3, 3],
-    strides=[1, 1],
-    max_length=max_num_words,
-    drop_rate=0.4,
-    activation="relu",
-    output_activation="softmax",
-    learn_embedding=True,
-    embed_dim=100,
-    embedding_matrix=None
-)
+# # Text-CNN model
+# model = TextCNN(
+#     vocab_size=len(word_index)+1,
+#     num_classes=len(classes),
+#     filters=[64, 64],
+#     kernals=[3, 3],
+#     strides=[1, 1],
+#     max_length=max_num_words,
+#     drop_rate=0.4,
+#     activation="relu",
+#     output_activation="softmax",
+#     learn_embedding=True,
+#     embed_dim=100,
+#     embedding_matrix=None
+# )
 
 # Note: All modes are supported
 
