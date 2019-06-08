@@ -135,7 +135,7 @@ model = TextCNN(
     activation="relu",
     output_activation="softmax",
     learn_embedding=True,
-    embed_dim=50,
+    embed_dim=100,
     embedding_matrix=None
 )
 
