@@ -98,14 +98,13 @@ y_test = keras.utils.to_categorical(y_test, num_classes=len(classes))
 # RNN model
 rnn_model = SimpleRNN(
     vocab_size=len(word_index) + 1,
-    max_length=max_num_words,
-    num_classes=len(classes),
+    num_classes=len(classes)
 )
 
 # LSTM model
 lstm_model = SimpleLSTM(
     vocab_size=len(word_index) + 1,
-    num_classes=len(classes),
+    num_classes=len(classes)
 )
 
 # OR Call a model with custom configuration
@@ -181,7 +180,6 @@ def test_step(text, labels):
     test_loss(loss)
     test_accuracy(labels, predictions)
 
-# Set run configuration
 epochs = 2
 template = "Epoch {}, Loss: {}, Accuracy: {}%, Test Loss: {}, Test Accuracy: {}%"
 
@@ -195,6 +193,6 @@ for epoch in range(1, epochs+1):
     # Test model on batches    
     for t_text, t_labels in test_ds:
         test_step(t_text, t_labels)
-    # Prompt user using defined template
+    # Prompt user
     print(template.format(epoch, train_loss.result(), train_accuracy.result()*100, test_loss.result(), test_accuracy.result()*100))
 print("Training Completed!")
