@@ -13,7 +13,7 @@ import tensorflow as tf
 from tensorflow.python.keras.api import keras
 from sklearn.model_selection import train_test_split
 
-import models
+from models import * # Import all models
 from utils import data_loader, load_embedding, create_embeddings
 
 
@@ -25,8 +25,8 @@ filepath = "~/__data__/news-category.json"
 # Load data using an appropriate data loader
 df = data_loader().load_json(filepath)
 
-print("Data Shape:", df.shape) # Data Shape: (200853, 6)
-print("Columns:", df.columns) # Columns: Index(['authors', 'category', 'date', 'headline', 'link', 'short_description'], dtype='object')
+# print("Data Shape:", df.shape) # Data Shape: (200853, 6)
+# print("Columns:", df.columns) # Columns: Index(['authors', 'category', 'date', 'headline', 'link', 'short_description'], dtype='object')
 
 # Select appropriate columns and create a numpy array with proper shape
 x = list(df.headline)
@@ -35,8 +35,8 @@ y = list(df.category)
 # Split data into train and test
 x_train, x_test, y_train, y_test = train_test_split(x, y) # Default test size of 25%
 
-print("Train samples:", len(x_train)) # Train size: 150639
-print("Test samples:", len(x_test)) # Test size: 50214
+# print("Train samples:", len(x_train)) # Train size: 150639
+# print("Test samples:", len(x_test)) # Test size: 50214
 
 # A dictionary mapping words to an integer index
 # Collect all textual data: Merge data from headlines and short description
@@ -94,23 +94,55 @@ y_test = [class_index[label] for label in y_test]
 y_train = keras.utils.to_categorical(y_train[:100], num_classes=len(classes))
 y_test = keras.utils.to_categorical(y_test[:100], num_classes=len(classes))
 
-# Create batch datasets: batches of 32 for train and 32 for test
-# For production i.e., to work with SavedModel use batch size of 1 for both
+# # Load model architecture with its default settings
+# # RNN model
+# model = SimpleRNN(
+#     vocab_size=len(word_index) + 1,
+#     max_length=max_num_words,
+#     num_classes=len(classes),
+# )
+
+# # LSTM model
+# model = SimpleLSTM(
+#     vocab_size=len(word_index) + 1,
+#     max_length=max_num_words,
+#     num_classes=len(classes),
+# )
+
+# # OR Call a model with custom configuration
+# # GRU model
+# model = SimpleGRU(
+#     vocab_size=len(word_index) + 1,
+#     max_length=max_num_words,
+#     num_classes=len(classes),
+#     num_nodes=[512, 1024, 1024],
+#     activation="relu",
+#     output_activation="softmax",
+#     learn_embedding=True,
+#     embed_dim=300,
+#     embedding_matrix=None
+# )
+
+# Text-CNN model
+model = TextCNN(
+    vocab_size=len(word_index)+1,
+    num_classes=len(classes),
+    filters=[64, 64, 128],
+    kernals=[3, 3, 3],
+    strides=[1, 1],
+    max_length=max_num_words,
+    drop_rate=0.4,
+    activation="relu",
+    output_activation="softmax",
+    learn_embedding=True,
+    embed_dim=100,
+    embedding_matrix=None
+)
+
+# # Create batch datasets: batches of 32 for train and 32 for test
+# # For production i.e., to work with SavedModel use batch size of 1 for both
 train_ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(32)
 test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(32)
-
-# Load model architecture and set your configuration
-sequence_classifier = SequenceClassification()
-my_model = sequence_classifier.get_simple_lstm(
-    vocab_size=len(word_index) + 1,
-    max_length=max_num_words, # Default: 512
-    num_nodes=256, # Default: 512
-    num_classes=len(classes),
-    learn_embedding=True, # Default
-    embedding_matrix=None, # Default
-    activation=None, # Default
-    output_activation="softmax" # Default
-)
 
 # Define model configuration
 loss_function = keras.losses.CategoricalCrossentropy()
@@ -130,12 +162,12 @@ def train_step(text, labels):
     # Use gradient tape for training the model
     with tf.GradientTape() as tape:
         # Get predictions
-        predictions = my_model(text)
+        predictions = model(text)
         # Compute instantaneous loss
         loss = loss_function(labels, predictions)
     # Update gradients
-    gradients = tape.gradient(loss, my_model.trainable_variables)
-    optimizer.apply_gradients(zip(gradients, my_model.trainable_variables))
+    gradients = tape.gradient(loss, model.trainable_variables)
+    optimizer.apply_gradients(zip(gradients, model.trainable_variables))
     # Store
     train_loss(loss)
     train_accuracy(labels, predictions)
@@ -144,7 +176,7 @@ def train_step(text, labels):
 @tf.function()
 def test_step(text, labels):
     # Get predictions
-    predictions = my_model(text)
+    predictions = model(text)
     # Compute instantaneous loss
     loss = loss_function(labels, predictions)
     # Store
@@ -152,7 +184,7 @@ def test_step(text, labels):
     test_accuracy(labels, predictions)
 
 # Set run configuration
-epochs = 1
+epochs = 3
 template = "Epoch {}, Loss: {}, Accuracy: {}%, Test Loss: {}, Test Accuracy: {}%"
 
 # Run
@@ -175,13 +207,13 @@ for epoch in range(1, epochs+1):
 # It makes it useful for sharing or deploying (with TFLite, TensorFlow.js, TensorFlow Serving, or TFHub)
 # Here /1 is the version number. Naming convention must be followed
 # For production i.e., to work with SavedModel use batch size of 1 for both or else inputs should match batch size
-tf.saved_model.save(my_model, "__models__/simple_lstm_model/1/")
+tf.saved_model.save(model, "../__models__/simple_lstm_model/1/")
 
 
 def inference():
     """Run inference from the saved model."""
     # Load saved model
-    loaded = tf.saved_model.load("__models__/simple_lstm_model/1/")
+    loaded = tf.saved_model.load("../__models__/simple_lstm_model/1/")
 
     # SavedModels have named functions called signatures
     # Keras models export their forward pass under the serving_default signature key
@@ -205,5 +237,5 @@ def inference():
     print("Original Label:", reverse_class_index[np.argmax(y_test[0])])
     print("Predicted Label:", reverse_class_index[predicted_id])
 
-# Call inference
-inference()
+# Inference module
+# inference()
