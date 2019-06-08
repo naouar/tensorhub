@@ -13,7 +13,7 @@ import tensorflow as tf
 from tensorflow.python.keras.api import keras
 from sklearn.model_selection import train_test_split
 
-from standard_models import SimpleRNN, SimpleLSTM, SimpleLSTM, TextCNN
+from standard_models import SimpleRNN, SimpleLSTM, SimpleGRU, TextCNN
 from utils import data_loader, Embeddings
 
 
@@ -94,56 +94,53 @@ y_test = [class_index[label] for label in y_test]
 y_train = keras.utils.to_categorical(y_train, num_classes=len(classes))
 y_test = keras.utils.to_categorical(y_test, num_classes=len(classes))
 
-# # Load model architecture with its default settings
-# # RNN model
-# model = SimpleRNN(
-#     vocab_size=len(word_index) + 1,
-#     max_length=max_num_words,
-#     num_classes=len(classes),
-# )
+# Load model architecture with its default settings
+# RNN model
+rnn_model = SimpleRNN(
+    vocab_size=len(word_index) + 1,
+    max_length=max_num_words,
+    num_classes=len(classes),
+)
 
 # LSTM model
-model = SimpleLSTM(
+lstm_model = SimpleLSTM(
     vocab_size=len(word_index) + 1,
     num_classes=len(classes),
 )
 
-# # OR Call a model with custom configuration
-# # GRU model
-# model = SimpleGRU(
-#     vocab_size=len(word_index) + 1,
-#     max_length=max_num_words,
-#     num_classes=len(classes),
-#     num_nodes=[512, 1024, 1024],
-#     activation="relu",
-#     output_activation="softmax",
-#     learn_embedding=True,
-#     embed_dim=300,
-#     embedding_matrix=None
-# )
+# OR Call a model with custom configuration
+# GRU model
+gru_model = SimpleGRU(
+    vocab_size=len(word_index) + 1,
+    max_length=max_num_words,
+    num_classes=len(classes),
+    num_nodes=[512, 1024, 1024],
+    activation="relu",
+    output_activation="softmax",
+    learn_embedding=True,
+    embed_dim=300,
+    embedding_matrix=None
+)
 
-# # Text-CNN model
-# model = TextCNN(
-#     vocab_size=len(word_index)+1,
-#     num_classes=len(classes),
-#     filters=[64, 64],
-#     kernals=[3, 3],
-#     strides=[1, 1],
-#     max_length=max_num_words,
-#     drop_rate=0.4,
-#     activation="relu",
-#     output_activation="softmax",
-#     learn_embedding=True,
-#     embed_dim=100,
-#     embedding_matrix=None
-# )
-
-# Note: All modes are supported
+# Text-CNN model
+text_cnn_model = TextCNN(
+    vocab_size=len(word_index)+1,
+    num_classes=len(classes),
+    filters=[64, 64],
+    kernals=[3, 3],
+    strides=[1, 1],
+    max_length=max_num_words,
+    drop_rate=0.4,
+    activation="relu",
+    output_activation="softmax",
+    learn_embedding=True,
+    embed_dim=100,
+    embedding_matrix=None
+)
 
 # Create batch datasets: batches of 32 for train and 32 for test
-# Batch size for test should match always, even in production so keep at 1 
-train_ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(16)
-test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(1)
+train_ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(32)
+test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(64)
 
 # Define model configuration
 loss_function = keras.losses.CategoricalCrossentropy()
@@ -163,12 +160,12 @@ def train_step(text, labels):
     # Use gradient tape for training the model
     with tf.GradientTape() as tape:
         # Get predictions
-        predictions = model(text)
+        predictions = lstm_model(text)
         # Compute instantaneous loss
         loss = loss_function(labels, predictions)
     # Update gradients
-    gradients = tape.gradient(loss, model.trainable_variables)
-    optimizer.apply_gradients(zip(gradients, model.trainable_variables))
+    gradients = tape.gradient(loss, lstm_model.trainable_variables)
+    optimizer.apply_gradients(zip(gradients, lstm_model.trainable_variables))
     # Store
     train_loss(loss)
     train_accuracy(labels, predictions)
@@ -177,16 +174,12 @@ def train_step(text, labels):
 @tf.function()
 def test_step(text, labels):
     # Get predictions
-    predictions = model(text)
+    predictions = lstm_model(text)
     # Compute instantaneous loss
     loss = loss_function(labels, predictions)
     # Store
     test_loss(loss)
     test_accuracy(labels, predictions)
-
-
-# # Path to save model
-# model_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "__models__/model_name/version_number/")
 
 # Set run configuration
 epochs = 2
