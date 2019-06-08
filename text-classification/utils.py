@@ -20,7 +20,7 @@ class data_loader:
         DataFrame -- Returns a df object.
     """
     def __init__(self):
-        print("Initiated Data Loader!")
+        pass
 
     @staticmethod
     def load_json(filepath):

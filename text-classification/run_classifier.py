@@ -92,7 +92,8 @@ y_test = [class_index[label] for label in y_test]
 
 # Convert integer encoded labels into categorical
 y_train = keras.utils.to_categorical(y_train[:100], num_classes=len(classes))
-y_test = keras.utils.to_categorical(y_test[:100], num_classes=len(classes))
+y_test = keras.utils.to_categorical(y_test[:100
+], num_classes=len(classes))
 
 # # Load model architecture with its default settings
 # # RNN model
@@ -105,7 +106,6 @@ y_test = keras.utils.to_categorical(y_test[:100], num_classes=len(classes))
 # # LSTM model
 # model = SimpleLSTM(
 #     vocab_size=len(word_index) + 1,
-#     max_length=max_num_words,
 #     num_classes=len(classes),
 # )
 
@@ -127,22 +127,24 @@ y_test = keras.utils.to_categorical(y_test[:100], num_classes=len(classes))
 model = TextCNN(
     vocab_size=len(word_index)+1,
     num_classes=len(classes),
-    filters=[64, 64, 128],
-    kernals=[3, 3, 3],
+    filters=[64, 64],
+    kernals=[3, 3],
     strides=[1, 1],
     max_length=max_num_words,
     drop_rate=0.4,
     activation="relu",
     output_activation="softmax",
     learn_embedding=True,
-    embed_dim=100,
+    embed_dim=50,
     embedding_matrix=None
 )
 
-# # Create batch datasets: batches of 32 for train and 32 for test
-# # For production i.e., to work with SavedModel use batch size of 1 for both
-train_ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(32)
-test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(32)
+# Note: All modes are supported
+
+# Create batch datasets: batches of 32 for train and 32 for test
+# Batch size for test should match always, even in production so keep at 1 
+train_ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(16)
+test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(1)
 
 # Define model configuration
 loss_function = keras.losses.CategoricalCrossentropy()
@@ -183,8 +185,12 @@ def test_step(text, labels):
     test_loss(loss)
     test_accuracy(labels, predictions)
 
+
+# # Path to save model
+# model_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "__models__/model_name/version_number/")
+
 # Set run configuration
-epochs = 3
+epochs = 2
 template = "Epoch {}, Loss: {}, Accuracy: {}%, Test Loss: {}, Test Accuracy: {}%"
 
 # Run
@@ -198,44 +204,5 @@ for epoch in range(1, epochs+1):
     for t_text, t_labels in test_ds:
         test_step(t_text, t_labels)
     # Prompt user using defined template
-    print(template.format(epoch+1, \
-        train_loss.result(), train_accuracy.result()*100, \
-        test_loss.result(), test_accuracy.result()*100))
-
-# A SavedModel contains a complete TensorFlow program, including weights and computation
-# It does not require the original model building code to run
-# It makes it useful for sharing or deploying (with TFLite, TensorFlow.js, TensorFlow Serving, or TFHub)
-# Here /1 is the version number. Naming convention must be followed
-# For production i.e., to work with SavedModel use batch size of 1 for both or else inputs should match batch size
-tf.saved_model.save(model, "../__models__/simple_lstm_model/1/")
-
-
-def inference():
-    """Run inference from the saved model."""
-    # Load saved model
-    loaded = tf.saved_model.load("../__models__/simple_lstm_model/1/")
-
-    # SavedModels have named functions called signatures
-    # Keras models export their forward pass under the serving_default signature key
-    # The SavedModel command line interface is useful for inspecting SavedModels on disk
-    print(list(loaded.signatures.keys()))  # ['serving_default']
-
-    # Define inference call
-    inference = loaded.signatures["serving_default"]
-
-    # Get possible outputs
-    print(inference.structured_outputs) # {'output_1': TensorSpec(shape=(32, 41), dtype=tf.float32, name='output_1')}
-
-    # Reshape your processed input
-    x = np.asarray(x_test[0]).reshape(1, len(x_test[0]))
-    x = x.astype(np.float32)
-
-    # Get predictions
-    labeling = inference(tf.constant(x))
-    predicted_id = np.argmax(labeling)
-
-    print("Original Label:", reverse_class_index[np.argmax(y_test[0])])
-    print("Predicted Label:", reverse_class_index[predicted_id])
-
-# Inference module
-# inference()
+    print(template.format(epoch, train_loss.result(), train_accuracy.result()*100, test_loss.result(), test_accuracy.result()*100))
+print("Training Completed!")
