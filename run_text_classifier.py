@@ -16,7 +16,7 @@ from text_classification.models import SimpleRNN, SimpleLSTM, SimpleGRU, TextCNN
 from utils import DataLoader, Embeddings
 
 
-"""Multiclass Text classification on 'News Healines' dataset."""
+"""Multiclass Text Classification on 'News Healines' Dataset."""
 
 # News categorization dataset
 filepath = "~/__data__/news-category.json"

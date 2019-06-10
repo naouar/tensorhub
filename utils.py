@@ -1,7 +1,6 @@
 """ 
 @Author: Kumar Nityan Suman
 @Date: 2019-05-28 22:18:30
-@Last Modified Time: 2019-05-28 22:18:30
 """
 
 # Load packages
@@ -12,6 +11,8 @@ import numpy as np
 import pandas as pd
 from tensorflow.python.keras.api import keras
 
+
+"""Contains Utilities Methods for Models."""
 
 class DataLoader:
     """Template class for data loaders.
