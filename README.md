@@ -17,7 +17,7 @@ Easily train and deploy models in the cloud, on-prem, in the browser, or on-devi
 **Powerful experimentation for research**
 A simple and flexible architecture to take new ideas from concept to code, to state-of-the-art models, and to publication faster.
 
-[Install TensorFlow](https://www.tensorflow.org/install)
+[Install TensorFlow and Get Started!](https://www.tensorflow.org/install)
 
 
 # How To Code ?
