@@ -1,7 +1,6 @@
 """ 
 @Author: Kumar Nityan Suman
 @Date: 2019-06-09 00:40:43
-@Last Modified Time: 2019-06-09 00:40:43
 """
 
 # Load packages

@@ -1,7 +1,6 @@
 """ 
 @Author: Kumar Nityan Suman
 @Date: 2019-05-28 02:56:59
-@Last Modified Time: 2019-05-28 02:56:59
 """
 
 # Load packages
@@ -13,7 +12,7 @@ import tensorflow as tf
 from tensorflow.python.keras.api import keras
 from sklearn.model_selection import train_test_split
 
-from models import SimpleRNN, SimpleLSTM, SimpleGRU, TextCNN
+from text_classification.models import SimpleRNN, SimpleLSTM, SimpleGRU, TextCNN
 from utils import DataLoader, Embeddings
 
 
@@ -23,7 +22,7 @@ from utils import DataLoader, Embeddings
 filepath = "~/__data__/news-category.json"
 
 # Load data using an appropriate data loader
-df = data_loader().load_json(filepath)
+df = DataLoader().load_json(filepath)
 
 # print("Data Shape:", df.shape) # Data Shape: (200853, 6)
 # print("Columns:", df.columns) # Columns: Index(['authors', 'category', 'date', 'headline', 'link', 'short_description'], dtype='object')
