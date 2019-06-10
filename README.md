@@ -17,9 +17,12 @@ Easily train and deploy models in the cloud, on-prem, in the browser, or on-devi
 **Powerful experimentation for research**
 A simple and flexible architecture to take new ideas from concept to code, to state-of-the-art models, and to publication faster.
 
+[Install TensorFlow](https://www.tensorflow.org/install)
+
+
 # How To Code ?
 
-**Sequential/Functional Interface**
+**Approach 1: Sequential/Functional Interface**
 
 The best place to start is with the user-friendly Sequential API. You can create models by plugging together building blocks. Run the “Hello World” example below, then visit the tutorials to learn more.
 
@@ -41,7 +44,7 @@ my_model = tf.keras.models.Model(inputs=inputs, outputs=predictions)
 ```
 
 
-**Subclassing Interface**
+**Approach 2: Subclassing Interface**
 
 The Subclassing API provides a define-by-run interface for advanced research. Create a class for your model, then write the forward pass imperatively. Easily **author custom layers**, **activations**, **training loop** and much more.
 
@@ -65,5 +68,11 @@ model = MyModel()
 ```
 
 *We prefer Subclassing to implement all the models since it gives more control for advanced research.*
+
+# Models Developed:
+
++ [Text Classification](text_classification/)
++ [Neural Machine Translation](nmt/)
+
 
 **[Build, deploy, and experiment easily with TensorFlow](https://www.tensorflow.org/)**
