@@ -13,7 +13,7 @@ import pandas as pd
 from tensorflow.python.keras.api import keras
 
 
-class data_loader:
+class DataLoader:
     """Template class for data loaders.
     
     Returns:

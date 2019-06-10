@@ -13,8 +13,8 @@ import tensorflow as tf
 from tensorflow.python.keras.api import keras
 from sklearn.model_selection import train_test_split
 
-from standard_models import SimpleRNN, SimpleLSTM, SimpleGRU, TextCNN
-from utils import data_loader, Embeddings
+from models import SimpleRNN, SimpleLSTM, SimpleGRU, TextCNN
+from utils import DataLoader, Embeddings
 
 
 """Multiclass Text classification on 'News Healines' dataset."""
@@ -187,7 +187,7 @@ template = "Epoch {}, Loss: {}, Accuracy: {}%, Test Loss: {}, Test Accuracy: {}%
 print("{:#^50s}".format("Train and Validate"))
 for epoch in range(1, epochs+1):
     print("Epoch {}/{}".format(epoch, epochs))
-    # Run model on batches
+    # Train model on batches
     for text, labels in train_ds:
         train_step(text, labels)
     # Test model on batches    
