@@ -12,7 +12,7 @@ from tensorflow.python.keras.api import keras
 
 
 class SimpleRNN(keras.Model):
-    def __init__(self, vocab_size, num_classes, max_length=512, num_nodes=[512, 1024, 1024], activation="relu", output_activation="softmax", learn_embedding=True, embed_dim=100, embedding_matrix=None):
+    def __init__(self, vocab_size, num_classes, max_length=512, num_nodes=[512, 1024, 1024], activation="relu", output_activation="softmax", learn_embedding=True, embed_dim=300, embedding_matrix=None):
         super(SimpleRNN, self).__init__()
         if learn_embedding == True:
             self.embedding_layer = keras.layers.Embedding(input_dim=vocab_size, output_dim=embed_dim, input_length=max_length, mask_zero=True)
@@ -33,7 +33,7 @@ class SimpleRNN(keras.Model):
 
 
 class SimpleLSTM(keras.Model):
-    def __init__(self, vocab_size, num_classes, max_length=512, num_nodes=[512, 1024, 1024], activation="relu", output_activation="softmax", learn_embedding=True, embed_dim=100, embedding_matrix=None):
+    def __init__(self, vocab_size, num_classes, max_length=512, num_nodes=[512, 1024, 1024], activation="relu", output_activation="softmax", learn_embedding=True, embed_dim=300, embedding_matrix=None):
         super(SimpleLSTM, self).__init__()
         if learn_embedding == True:
             self.embedding_layer = keras.layers.Embedding(input_dim=vocab_size, output_dim=embed_dim, input_length=max_length, mask_zero=True)
@@ -54,7 +54,7 @@ class SimpleLSTM(keras.Model):
 
 
 class SimpleGRU(keras.Model):
-    def __init__(self, vocab_size, num_classes, max_length=512, num_nodes=[512, 1024, 1024], activation="relu", output_activation="softmax", learn_embedding=True, embed_dim=100, embedding_matrix=None):
+    def __init__(self, vocab_size, num_classes, max_length=512, num_nodes=[512, 1024, 1024], activation="relu", output_activation="softmax", learn_embedding=True, embed_dim=300, embedding_matrix=None):
         super(SimpleGRU, self).__init__()
         if learn_embedding == True:
             self.embedding_layer = keras.layers.Embedding(input_dim=vocab_size, output_dim=embed_dim, input_length=max_length, mask_zero=True)
@@ -75,7 +75,7 @@ class SimpleGRU(keras.Model):
 
 
 class TextCNN(keras.Model):
-    def __init__(self, vocab_size, num_classes, max_length=512, filters=[128, 128], kernals=[5, 5], strides=[2, 2], drop_rate=0.4, activation="relu", output_activation="softmax", learn_embedding=True, embed_dim=100, embedding_matrix=None):
+    def __init__(self, vocab_size, num_classes, max_length=512, filters=[128, 128], kernals=[5, 5], strides=[2, 2], drop_rate=0.4, activation="relu", output_activation="softmax", learn_embedding=True, embed_dim=300, embedding_matrix=None):
         super(TextCNN, self).__init__()
         if learn_embedding == True:
             self.embedding_layer = keras.layers.Embedding(input_dim=vocab_size, output_dim=embed_dim, input_length=max_length)
