@@ -69,10 +69,10 @@ model = MyModel()
 
 *We prefer Subclassing to implement all the models since it gives more control for advanced research.*
 
-# Models Developed:
+# Whats inside ?:
 
 + Text Classification
 + Neural Machine Translation
-
++ Custom Layers & Blocks
 
 **[Build, deploy, and experiment easily with TensorFlow](https://www.tensorflow.org/)**
