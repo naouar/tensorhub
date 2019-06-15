@@ -13,7 +13,7 @@ from tensorflow.python.keras.api import keras
 from sklearn.model_selection import train_test_split
 
 from utils import DataLoader, Embeddings
-from text_classification.models import SimpleRNN, SimpleLSTM, SimpleGRU, TextCNN
+from nlp.text_classification import SimpleRNN, SimpleLSTM, SimpleGRU, TextCNN
 
 
 """Multiclass Text Classification on 'News Healines' Dataset."""
