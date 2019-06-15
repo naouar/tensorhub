@@ -3,7 +3,7 @@
 
 The core open source library to help you develop and train ML models easy and fast as never before.
 
-![TensorMine](header.png)
+![TensorMine](__data__/header.png)
 
 # Why TensorFlow ?
 TensorFlow is an end-to-end open source platform for machine learning. It has a comprehensive, flexible ecosystem of tools, libraries and community resources that lets researchers push the state-of-the-art in ML and developers easily build and deploy ML powered applications.
@@ -71,8 +71,8 @@ model = MyModel()
 
 # Models Developed:
 
-+ [Text Classification](text_classification/)
-+ [Neural Machine Translation](nmt/)
++ Text Classification
++ Neural Machine Translation
 
 
 **[Build, deploy, and experiment easily with TensorFlow](https://www.tensorflow.org/)**
