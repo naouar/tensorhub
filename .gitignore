@@ -9,3 +9,8 @@ __pycache__
 
 # Ignore mac files
 *.DS_Store
+
+# Ignore data files
+*.json
+*.csv
+*.tsv
