@@ -169,4 +169,3 @@ class PositionEmbedding(keras.layers.Layer):
             return input_shape
         elif self.mode == "concat":
             return (input_shape[0], input_shape[1], input_shape[2] + self.size)
-
