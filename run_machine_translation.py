@@ -8,7 +8,8 @@ import os
 import sys
 import re
 import numpy as np
-from tensorflow.python.keras.api import keras
+import tensorflow as tf
+from tensorflow import keras
 
 # from nlp.machine_translation import 
 

@@ -9,11 +9,11 @@ import sys
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-from tensorflow.python.keras.api import keras
+from tensorflow import keras
 from sklearn.model_selection import train_test_split
 
 from utils import DataLoader, Embeddings
-from nlp.text_classification import SimpleRNN, SimpleLSTM, SimpleGRU, TextCNN
+from nlp.simple_classification import SimpleRNN, SimpleLSTM, SimpleGRU, TextCNN
 
 
 """Multiclass Text Classification on 'News Healines' Dataset."""

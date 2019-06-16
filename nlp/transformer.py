@@ -8,7 +8,7 @@ import os
 import sys
 import numpy as np
 import tensorflow as tf
-from tensorflow.python.keras.api import keras
+from tensorflow import keras
 
 
 """Transfomer in different flavours."""

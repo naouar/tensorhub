@@ -7,7 +7,7 @@
 import os
 import sys
 import tensorflow as tf
-from tensorflow.python.keras.api import keras
+from tensorflow import keras
 
 
 class SimpleEncoderDecoder(keras.Model):
