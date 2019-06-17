@@ -97,13 +97,6 @@ y_train = keras.utils.to_categorical(y_train, num_classes=len(classes))
 y_test = keras.utils.to_categorical(y_test, num_classes=len(classes))
 
 # Load model architecture with its default settings
-# RNN model
-rnn_model = SimpleTextClassification(
-    model_name="rnn",
-    vocab_size=len(word_index) + 1,
-    num_classes=len(classes)
-)
-
 # LSTM model
 lstm_model = SimpleTextClassification(
     model_name="lstm",
@@ -111,20 +104,27 @@ lstm_model = SimpleTextClassification(
     num_classes=len(classes)
 )
 
-# OR call a model with custom configuration
-# LSTM model
-lstm_configured_model = SimpleTextClassification(
-    model_name="lstm",
-    vocab_size=len(word_index) + 1,
-    max_length=max_num_words,
-    num_classes=len(classes),
-    num_nodes=[512, 1024, 1024],
-    activation="relu",
-    output_activation="softmax",
-    learn_embedding=False,
-    embed_dim=300,
-    embedding_matrix=embedding_matrix
-)
+# # RNN model
+# rnn_model = SimpleTextClassification(
+#     model_name="rnn",
+#     vocab_size=len(word_index) + 1,
+#     num_classes=len(classes)
+# )
+
+# # OR call a model with custom configuration
+# # LSTM model
+# lstm_configured_model = SimpleTextClassification(
+#     model_name="lstm",
+#     vocab_size=len(word_index) + 1,
+#     max_length=max_num_words,
+#     num_classes=len(classes),
+#     num_nodes=[512, 1024, 1024],
+#     activation="relu",
+#     output_activation="softmax",
+#     learn_embedding=False,
+#     embed_dim=300,
+#     embedding_matrix=embedding_matrix
+# )
 #@INFO: Check nlp/ for more models and how to use them.
 
 # Create batch datasets: batches of 32 for train and 64 for test
