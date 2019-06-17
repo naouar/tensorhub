@@ -19,7 +19,6 @@ A simple and flexible architecture to take new ideas from concept to code, to st
 
 [Install TensorFlow and Get Started!](https://www.tensorflow.org/install)
 
-
 # How To Code ?
 
 **Approach 1: Sequential/Functional Interface**
@@ -69,10 +68,18 @@ model = MyModel()
 
 *We prefer Subclassing to implement all the models since it gives more control for advanced research.*
 
-# Whats inside ?:
+# Whats cooking ?:
 
 + Text Classification
++ Sentiment Analysis
+    * Aspect Based Sentiment Analysis
++ Named Entity Recognition
 + Neural Machine Translation
 + Custom Layers & Blocks
+    * Self-Attention
+    * Transformer Encoder - Decoder
+    * Evolved-Transformer
+
+*And a lot more on the way.*
 
 **[Build, deploy, and experiment easily with TensorFlow](https://www.tensorflow.org/)**
