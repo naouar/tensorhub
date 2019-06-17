@@ -13,7 +13,6 @@ from tensorflow import keras
 
 """Contains Utilities Methods for Model Training and Validation."""
 
-
 class DataLoader:
     """Template class for loading data from multiple sources into a dataframe.
     
@@ -124,48 +123,3 @@ class Embeddings:
             if embedding_vector is not None:
                 embedding_matrix[i] = embedding_vector
         return embedding_matrix
-
-
-class PositionEmbedding(keras.layers.Layer):
-    """Compute position embedding for attention layer.
-    
-    Returns:
-        NumpyArray -- Position embdding.
-    """
-    def __init__(self, mode="sum", size=None):
-        """Class constructor.
-        
-        Keyword Arguments:
-            mode {str} -- Type of position embedding. (default: {"sum"})
-            size {[type]} -- Size of the position embedding. (default: {None})
-        """
-        self.size = size
-        self.mode = mode
-        super(PositionEmbedding, self).__init__()
-        
-    def call(self, x):
-        # Update position embedding size
-        if self.size == None or self.mode == "sum":
-            self.size = int(x.shape[-1])
-        batch_size, seq_len = np.shape(x)[0], np.shape(x)[1]
-        # Compute position j
-        position_j = 1. / np.pow(10000., 2 * np.arange(self.size / 2, dtype="float32") / self.size)
-        position_j = np.expand_dims(position_j, 0)
-        # Compute position i
-        position_i = np.cumsum(np.ones_like(x[:,:,0]), 1) -1
-        position_i = np.expand_dims(position_i, 2)
-        # Compute relative position
-        position_ij = np.dot(position_i, position_j)
-        position_ij = np.concatenate([np.cos(position_ij), np.sin(position_ij)], 2)
-        # Update embedding based on modes
-        if self.mode == "sum":
-            return position_ij + x
-        elif self.mode == "concat":
-            return np.concatenate([position_ij, x], 2)
-    
-    def compute_output_shape(self, input_shape):
-        # Compute output shape
-        if self.mode == "sum":
-            return input_shape
-        elif self.mode == "concat":
-            return (input_shape[0], input_shape[1], input_shape[2] + self.size)
