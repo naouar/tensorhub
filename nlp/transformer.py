@@ -3,15 +3,13 @@
 @Date: 2019-06-15 22:50:04
 """
 
-
 import os
 import sys
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 
-
-"""Transfomer in different flavours."""
+"""Transfomer Architecture Implementation."""
 
 class TransfomerEncoder:
     """Classical transfomer architecture implementation."""

@@ -3,7 +3,6 @@
 @Date: 2019-06-16 12:43:53
 """
 
-
 # Load packages
 import os
 import sys
@@ -12,8 +11,7 @@ import tensorflow as tf
 from tensorflow import keras
 from utils import PositionEmbedding
 
-
-"""Multi-head Self-Attention implementation as a layer."""
+"""Multi-Head Self-Attention Implementation as a Layer."""
 
 class PositionEmbedding(keras.layers.Layer):
     """Compute position embedding for attention layer.

@@ -9,6 +9,7 @@ import sys
 import tensorflow as tf
 from tensorflow import keras
 
+"""Neural Machine Translation Model Implementations."""
 
 class SimpleEncoderDecoder(keras.Model):
     def __init__(self, src_vocab_size, tar_vocab_size, encoder="lstm", decoder="lstm", src_max_seq=512, tar_max_seq=512, num_nodes=[512, 512], embed_dim=300, learn_embedding=True, embedding_matrix=None):
