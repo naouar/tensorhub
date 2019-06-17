@@ -80,6 +80,6 @@ model = MyModel()
     * Transformer Encoder - Decoder
     * Evolved-Transformer
 
-*And a lot more on the way.*
+*And a lot more*
 
 **[Build, deploy, and experiment easily with TensorFlow](https://www.tensorflow.org/)**
