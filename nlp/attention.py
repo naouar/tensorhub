@@ -9,7 +9,6 @@ import sys
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
-from utils import PositionEmbedding
 
 """Multi-Head Self-Attention Implementation as a Layer."""
 
@@ -74,7 +73,7 @@ class PositionEmbedding(keras.layers.Layer):
             return (input_shape[0], input_shape[1], input_shape[2] + self.size)
 
 
-class Attention(keras.layers):
+class MultiHeadAttention(keras.layers.Layer):
     def __init__(self, num_head, head_size):
         """Constructor to initialize input independent variables.
         
@@ -85,7 +84,7 @@ class Attention(keras.layers):
         self.num_head = num_head
         self.head_size = head_size
         self.output_dim = self.num_head * self.head_size
-        super(Attention, self).__init__()
+        super(MultiHeadAttention, self).__init__()
     
     def build(self, input_shape):
         """Initialize input dependent variables.
@@ -112,7 +111,7 @@ class Attention(keras.layers):
             trainable=True
         )
         # Build the layer
-        super(Attention, self).build(input_shape)
+        super(MultiHeadAttention, self).build(input_shape)
     
     def mask(self, inputs, seq_len, mode="sum"):
         """Mask input tensor.
@@ -189,3 +188,26 @@ class Attention(keras.layers):
             Tensor -- Output shape tensor.
         """
         return (input_shape[0][0], input_shape[0][1], self.output_dim)
+
+
+class BahdanauAttention(keras.Model):
+    def __init__(self, units=10):
+        super(BahdanauAttention, self).__init__()
+        self.W1 = keras.layers.Dense(units)
+        self.W2 = keras.layers.Dense(units)
+        self.V = keras.layers.Dense(1)
+
+    def call(self, query, values):
+        # Hidden shape == (batch_size, hidden size)
+        # Hidden shape with_time_axis shape == (batch_size, 1, hidden size)
+        hidden_with_time_axis = tf.expand_dims(query, 1)
+
+        score = self.V(keras.activations.tanh(self.W1(values) + self.W2(hidden_with_time_axis)))
+
+        # Compute attention weights
+        attention_weights = tf.nn.softmax(score, axis=1)
+
+        # Create context vector
+        context_vector = attention_weights * values
+        context_vector = tf.reduce_sum(context_vector, axis=1)
+        return context_vector, attention_weights
