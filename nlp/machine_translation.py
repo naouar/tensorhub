@@ -8,37 +8,77 @@ import os
 import sys
 import tensorflow as tf
 from tensorflow import keras
+from attention import BahdanauAttention
 
 """Neural Machine Translation Model Implementations."""
 
-class SimpleEncoderDecoder(keras.Model):
-    def __init__(self, src_vocab_size, tar_vocab_size, encoder="lstm", decoder="lstm", src_max_seq=512, tar_max_seq=512, num_nodes=[512, 512], embed_dim=300, learn_embedding=True, embedding_matrix=None):
+class Encoder(keras.Model):
+    def __init__(self, src_vocab_size, name="gru", embedding_dim=300, enc_units=128):
+        super(Encoder, self).__init__()
+        self.embedding = keras.layers.Embedding(src_vocab_size, embedding_dim)
+        if name == "lstm":
+            self.encoder_layer = keras.layers.LSTM(enc_units, return_sequences=True, return_state=True, recurrent_initializer="glorot_uniform")
+        elif name == "gru":
+            self.encoder_layer = keras.layers.GRU(enc_units, return_sequences=True, return_state=True, recurrent_initializer="glorot_uniform")
+        else:
+            raise ValueError("Wrong encoder type passed! {}".format(name))
+
+    def call(self, x, hidden):
+        x = self.embedding(x)
+        output, state = self.encoder_layer(x, initial_state=hidden)
+        return output, state
+
+
+class Decoder(keras.Model):
+    def __init__(self, tar_vocab_size, name="gru", embedding_dim=300, dec_units=128):
+        super(Decoder, self).__init__()
+        self.embedding = keras.layers.Embedding(tar_vocab_size, embedding_dim)
+        if name == "lstm":
+            self.decoder_layer = keras.layers.LSTM(dec_units, return_sequences=True, return_state=True, recurrent_initializer="glorot_uniform")
+        elif name == "gru":
+            self.decoder_layer = keras.layers.GRU(dec_units, return_sequences=True, return_state=True, recurrent_initializer="glorot_uniform")
+        else:
+            raise ValueError("Wrong encoder type passed! {}".format(name))
+
+    def call(self, x, hidden):
+        x = self.embedding(x)
+        output, state = self.decoder_layer(x, initial_state=hidden)
+        return output, state
+
+
+class AttentionDecoder(keras.Model):
+    def __init__(self, tar_vocab_size, name="gru", embedding_dim=300, dec_units=128, batch_sz=32):
+        super(Decoder, self).__init__()
         # Embedding layer
-        if learn_embedding == True:
-            self.embedding_layer = keras.layers.Embedding(src_vocab_size, embed_dim, input_length=src_max_seq, mask_zero=True)
+        self.embedding = keras.layers.Embedding(tar_vocab_size, embedding_dim)
+        # Encoder layer
+        if name == "lstm":
+            self.decoder_layer = keras.layers.LSTM(dec_units, return_sequences=True, return_state=True, recurrent_initializer="glorot_uniform")
+        elif name == "gru":
+            self.decoder_layer = keras.layers.GRU(dec_units, return_sequences=True, return_state=True, recurrent_initializer="glorot_uniform")
         else:
-            self.embedding_layer = keras.layers.Embedding(input_dim=src_vocab_size, output_dim=embed_dim, weights=[embedding_matrix], trainable=False, input_length=src_max_length)
-        # Set encoder
-        if encoder == "lstm":
-            self.encoder = keras.layers.LSTM(num_nodes[0], recurrent_initializer="glorot_uniform", recurrent_activation="sigmoid")
-        elif encoder == "gru":
-            self.encoder = keras.layers.GRU(num_nodes[0], recurrent_initializer="glorot_uniform", recurrent_activation="sigmoid")
-        else:
-            raise ValueError("Wrong encoder selected -> {}".format(encoder))
-        # Set decoder
-        if decoder == "lstm":
-            self.decoder = keras.layers.LSTM(num_nodes[0], recurrent_initializer="glorot_uniform", recurrent_activation="sigmoid", return_sequences=True)
-        elif decoder == "gru":
-            self.decoder = keras.layers.GRU(num_nodes[0], recurrent_initializer="glorot_uniform", recurrent_activation="sigmoid", return_sequences=True)
-        else:
-            raise ValueError("Wrong decoder selected -> {}".format(decoder))
-        self.repeat_vector = keras.layers.RepeatVector(tar_max_seq)
-        self.output_layer = keras.layers.TimeDistributed(keras.layers.Dense(tar_vocab_size, activation="softmax"))
-    
-    def call(self, x):
-        x = self.embedding_layer(x)
-        x = self.encoder(x)
-        x = self.repeat_vector(x)
-        x = self.decoder(x)
-        x = self.output_layer(x)
-        return x
+            raise ValueError("Wrong encoder type passed! {}".format(encoder))
+        # Fully connect layer
+        self.fc = keras.layers.Dense(tar_vocab_size)
+        # Used for attention
+        self.attention = BahdanauAttention(dec_units)
+
+    def call(self, x, hidden, enc_output):
+        # Attention on encoder output
+        context_vector, attention_weights = self.attention(hidden, enc_output)
+
+        # Embedding layer
+        x = self.embedding(x)
+
+        # Residual with attention and target sequence
+        x = tf.concat([tf.expand_dims(context_vector, 1), x], axis=-1)
+
+        # Passing the concatenated vector to the decoder
+        output, state = self.decoder_layer(x)
+
+        # Reshape output
+        output = tf.reshape(output, (-1, output.shape[2]))
+
+        # Pass through fully connected layer
+        x = self.fc(output)
+        return x, state, attention_weights
