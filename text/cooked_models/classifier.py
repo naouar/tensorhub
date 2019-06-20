@@ -18,7 +18,7 @@ from text.blocks.embeddings import Embeddings
 class SimpleTextClassification(keras.Model):
     """Simple text classification model implementation using recurrent neural networks."""
 
-    def __init__(self, vocab_size, num_classes, model_name="lstm", bidir=False, max_seq_length=256, num_nodes=[256, 512], learn_embedding=True, embed_dim=300, embedding_matrix=None):
+    def __init__(self, vocab_size, num_classes, model_name="lstm", bidir=False, max_seq_length=256, num_nodes=[256, 512], learn_embedding=True, embedding_dim=300, embedding_matrix=None):
         """Text classification using some basic standard recurrent neural network architectures.
         
         Arguments:
@@ -31,7 +31,7 @@ class SimpleTextClassification(keras.Model):
             max_seq_length {int} -- Maximum length of the input sequence length. (default: {256})
             num_nodes {list} -- Number of nodes in rnn and otther two dense layers respectively. (default: {[256, 512]})
             learn_embedding {bool} -- Boolean denoting to learn embedding or use pre-trained embeddings. (default: {True})
-            embed_dim {int} -- Embedding dimension. (default: {300})
+            embedding_dim {int} -- Embedding dimension. (default: {300})
             embedding_matrix {numpy} -- Pre-trained embedding loaded into a numpy matrix if 'learn_embedding' == True. (default: {None})
         """
         super(SimpleTextClassification, self).__init__()
@@ -77,7 +77,7 @@ class SimpleTextClassification(keras.Model):
 class TextCNN(keras.Model):
     """Text classification using 2D convolutional neural networks."""
 
-    def __init__(self, vocab_size, num_classes, max_length=512, filters=[128, 128], kernals=[5, 5], strides=[2, 2], drop_rate=0.4, learn_embedding=True, embed_dim=300, embedding_matrix=None):
+    def __init__(self, vocab_size, num_classes, max_length=512, filters=[128, 128], kernals=[5, 5], strides=[2, 2], drop_rate=0.4, learn_embedding=True, embedding_dim=300, embedding_matrix=None):
         super(TextCNN, self).__init__()
         # Embedding
         self.embedding = Embeddings.EmbeddingLayer(vocab_size=vocab_size, max_seq_length=max_seq_length, embedding_dim=embedding_dim, learn_embedding=learn_embedding, embedding_matrix=embedding_matrix)
