@@ -19,12 +19,13 @@ class Embeddings:
         pass
 
     @staticmethod
-    def create_vocabulary(corpus, type_embedding="word", num_tokens=10000):
+    def create_vocabulary(corpus, type_embedding="word", num_words=10000):
         """Create a sequence tokenizer and generate vocabulary. Supports both 'word' and 'char' sequences.
         
         Arguments:
             corpus {list} -- A list of strings from which word-index or char-index mapping is created.
-            num_tokens {int} -- Maximum number of tokens to keep, based on word frequency. Only the most common (num_tokens-1) tokens will be kept.
+            num_words {int} -- Maximum number of words to keep, based on word frequency. \
+                Only the most common (num_words-1) tokens will be kept. Not necessary when doing character embedding.
         
         Returns:
             TokenizerObject -- Tokenizer object to fit sequences.
@@ -33,7 +34,7 @@ class Embeddings:
         # Custom tokenizer
         if type_embedding.lower() == "word":
             # Word embeddings
-            tokenizer = keras.preprocessing.text.Tokenizer(num_tokens=num_tokens, oov_token="<UNK>")
+            tokenizer = keras.preprocessing.text.Tokenizer(num_words=num_words, oov_token="<UNK>")
         else:
             # Character embeddings
             tokenizer = keras.preprocessing.text.Tokenizer(char_level=True, oov_token="<UNK>")
@@ -75,7 +76,7 @@ class Embeddings:
         return embedding_matrix
     
     @staticmethod
-    def EmbeddingLayer(self, vocab_size, embedding_dim, max_seq_length, learn_embedding, embedding_matrix):
+    def EmbeddingLayer(vocab_size, embedding_dim, max_seq_length, learn_embedding, embedding_matrix):
         """Create an embedding layer for training or to load pre-trained embeddings.
         
         Arguments:
@@ -89,9 +90,9 @@ class Embeddings:
             layer -- Keras embedding layer to be used with othr model.
         """
         if learn_embedding == True:
-            embedding_layer = keras.layers.Embedding(input_dim=vocab_size, output_dim=embedding_dim, input_length=max_length, mask_zero=True)
+            embedding_layer = keras.layers.Embedding(input_dim=vocab_size, output_dim=embedding_dim, input_length=max_seq_length, mask_zero=True)
         else:
-            embedding_layer = keras.layers.Embedding(input_dim=vocab_size, output_dim=embedding_dim, weights=[embedding_matrix], trainable=False, input_length=max_length)
+            embedding_layer = keras.layers.Embedding(input_dim=vocab_size, output_dim=embedding_dim, weights=[embedding_matrix], trainable=False, input_length=max_seq_length)
         return embedding_layer
 
 
