@@ -17,9 +17,11 @@ Easily train and deploy models in the cloud, on-prem, in the browser, or on-devi
 **Powerful experimentation for research**
 A simple and flexible architecture to take new ideas from concept to code, to state-of-the-art models, and to publication faster.
 
-[Install TensorFlow and Get Started!](https://www.tensorflow.org/install)
+**[Install TensorFlow and Get Started!](https://www.tensorflow.org/install)**
 
-## How To Code ?
+**[Build, deploy, and experiment easily with TensorFlow](https://www.tensorflow.org/)**
+
+## How To Code in TensorFlow 2.0?
 
 **Approach 1: Sequential/Functional Interface**
 
@@ -66,20 +68,40 @@ class MyModel(tf.keras.Model):
 model = MyModel()
 ```
 
-*We prefer Subclassing to implement all the models since it gives more control for advanced research.*
+*We prefer Subclassing to implement all our models/building blocks since it gives more flexibility and control for advanced research.*
 
 ## Whats cooking ?
 
-+ Text Classification
-+ Sentiment Analysis
-    * Aspect Based Sentiment Analysis
-+ Named Entity Recognition
-+ Neural Machine Translation
-+ Custom Layers & Blocks
-    * Self-Attention
-    * Transformer Encoder - Decoder
-    * Evolved-Transformer
++ Natural Language Processing
+    + Cooked Models:
+        + Text Classification
+            * RNN
+            * LSTM
+            * GRU
+        + Neural Machine Translation
+            * GRU (w/ or w/o Attention)
+            * LSTM (w/ or w/o Attention)
+    + Building Blocks:
+        + Attention
+            * Self-Attention
+            * Bahdanau Attention
+        + Encoder - Decoder
+            * RNN (w/ or w/o Attention)
+            * GRU (w/ or w/o Attention)
+            * LSTM (w/ or w/o Attention)
 
 *And a lot more*
 
-**[Build, deploy, and experiment easily with TensorFlow](https://www.tensorflow.org/)**
+
+## How to use TensorMine ?
+
+`TensorMine` is a global collection of `Lego` like blocks for Neutral Networks. You can use it as you like. Only your creativity can stop you from making your master piece. `TensorMine` gives you the freedom to design your neural architecture / solution and not worry about it's components.
+
+Aim is to provide you enough interlocking building blocks that you can build any neural architecture from basic to advance in less than 15 minutes with less than 30 lines of codes in `TensorFlow 2.0`.
+
+We provide a set of cooked models that can be used directly with a single method call in it's default configuration or with a custom configuration. Internally these models also use `TensorMine`'s neural building blocks to implement all architectures.
+
+
+Drop me a mail or connect with me on [Linkedin](https://linkedin.com/in/kumar-nityan-suman/) or over the [e-mail](nityan.suman@gmail.com).
+
+If you like the work I do, show your appreciation by 'FORK', 'START', or 'SHARE'.
