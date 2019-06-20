@@ -10,7 +10,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 
-"""Multi-Head Self-Attention Implementation as a Layer."""
+"""Flavours of Attentions Implementated."""
 
 class PositionEmbedding(keras.layers.Layer):
     """Compute position embedding for attention layer.
