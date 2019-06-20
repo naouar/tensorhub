@@ -5,6 +5,15 @@ The core open source library to help you develop and train ML models easy and fa
 
 ![TensorMine](__data__/header.png)
 
+# How to use TensorMine ?
+
+`TensorMine` is a global collection of `Lego blocks` for Neutral Networks. You can use it as you like. Only your creativity can stop you from making your own master piece. `TensorMine` gives you the freedom to design your neural architecture / solution and not worry about it's components.
+
+Our aim is to provide you enough interlocking building blocks that you can build any neural architecture from basic to advance in less than `15 minutes` with less than `30 lines` of codes in `TensorFlow 2.0`.
+
+We also provide a set of cooked models that can be used directly with a single method call in it's default configuration or with a custom configuration. Internally these models also use `TensorMine`'s neural lego blocks to implement all architectures.
+
+
 # Why TensorFlow ?
 TensorFlow is an end-to-end open source platform for machine learning. It has a comprehensive, flexible ecosystem of tools, libraries and community resources that lets researchers push the state-of-the-art in ML and developers easily build and deploy ML powered applications.
 
@@ -20,6 +29,7 @@ A simple and flexible architecture to take new ideas from concept to code, to st
 **[Install TensorFlow and Get Started!](https://www.tensorflow.org/install)**
 
 **[Build, deploy, and experiment easily with TensorFlow](https://www.tensorflow.org/)**
+
 
 ## How To Code in TensorFlow 2.0?
 
@@ -70,7 +80,8 @@ model = MyModel()
 
 *We prefer Subclassing to implement all our models/building blocks since it gives more flexibility and control for advanced research.*
 
-## Whats cooking ?
+
+# Whats cooking ?
 
 + Natural Language Processing
     + Cooked Models:
@@ -90,17 +101,7 @@ model = MyModel()
             * GRU (w/ or w/o Attention)
             * LSTM (w/ or w/o Attention)
 
-*And a lot more*
-
-
-## How to use TensorMine ?
-
-`TensorMine` is a global collection of `Lego like blocks` for Neutral Networks. You can use it as you like. Only your creativity can stop you from making your master piece. `TensorMine` gives you the freedom to design your neural architecture / solution and not worry about it's components.
-
-Aim is to provide you enough interlocking building blocks that you can build any neural architecture from basic to advance in less than `15 minutes` with less than `30 lines` of codes in `TensorFlow 2.0`.
-
-We provide a set of cooked models that can be used directly with a single method call in it's default configuration or with a custom configuration. Internally these models also use `TensorMine`'s neural building blocks to implement all architectures.
-
+- - - -
 
 Drop me a mail or connect with me on [Linkedin](https://linkedin.com/in/kumar-nityan-suman/) or over the [e-mail](nityan.suman@gmail.com).
 
