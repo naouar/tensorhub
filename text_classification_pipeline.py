@@ -15,7 +15,6 @@ from sklearn.model_selection import train_test_split
 
 # Custom imports
 from text.blocks.embeddings import Embeddings
-from text.blocks.utils import DataLoader
 from text.cooked_models.classifier import SimpleTextClassification, TextCNN
 
 """Multiclass Text Classification on 'News Healines' Dataset."""
@@ -26,8 +25,8 @@ from text.cooked_models.classifier import SimpleTextClassification, TextCNN
 # Path to dataset in use
 filepath = "~/__data__/news-category.json"
 
-# Load data using an appropriate data loader
-df = DataLoader().load_json(filepath)
+# Load data into a dataframe
+df = pd.read_json(filepath, orient="records", encoding="utf-8", lines=True)
 
 print("Data Shape:", df.shape)
 print("Columns:", df.columns)
