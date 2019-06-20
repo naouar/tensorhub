@@ -95,9 +95,9 @@ model = MyModel()
 
 ## How to use TensorMine ?
 
-`TensorMine` is a global collection of `Lego` like blocks for Neutral Networks. You can use it as you like. Only your creativity can stop you from making your master piece. `TensorMine` gives you the freedom to design your neural architecture / solution and not worry about it's components.
+`TensorMine` is a global collection of `Lego like blocks` for Neutral Networks. You can use it as you like. Only your creativity can stop you from making your master piece. `TensorMine` gives you the freedom to design your neural architecture / solution and not worry about it's components.
 
-Aim is to provide you enough interlocking building blocks that you can build any neural architecture from basic to advance in less than 15 minutes with less than 30 lines of codes in `TensorFlow 2.0`.
+Aim is to provide you enough interlocking building blocks that you can build any neural architecture from basic to advance in less than `15 minutes` with less than `30 lines` of codes in `TensorFlow 2.0`.
 
 We provide a set of cooked models that can be used directly with a single method call in it's default configuration or with a custom configuration. Internally these models also use `TensorMine`'s neural building blocks to implement all architectures.
 
