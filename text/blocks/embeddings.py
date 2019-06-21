@@ -119,7 +119,7 @@ class PositionEmbedding(keras.layers.Layer):
         # Update position embedding size
         if self.size == None or self.mode == "sum":
             self.size = int(x.shape[-1])
-        batch_size, seq_len = np.shape(x)[0], np.shape(x)[1]
+        batch_size = np.shape(x)[0]
         # Compute position j
         position_j = 1. / np.pow(10000., 2 * np.arange(self.size / 2, dtype="float32") / self.size)
         position_j = np.expand_dims(position_j, 0)

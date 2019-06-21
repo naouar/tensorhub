@@ -90,6 +90,7 @@ class TextCNN(keras.Model):
         self.dropout_layer = keras.layers.Dropout(rate=drop_rate)
         self.output_layer = keras.layers.Dense(units=num_classes, activation=output_activation)
     
+    
     def call(self, x):
         x = self.embedding_layer(x)
         x = self.reshape_layer(x)

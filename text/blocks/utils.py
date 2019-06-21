@@ -5,8 +5,7 @@
 
 
 # Load packages
-import os
-import sys
+import tensorflow as tf
 
 
 class Trainer:

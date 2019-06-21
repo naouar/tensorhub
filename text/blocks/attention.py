@@ -110,7 +110,7 @@ class SelfAttention(keras.layers.Layer):
         # Compute attention vector
         attn = np.dot(query_seq, key_seq, axes=[3, 3]) / self.head_size**0.5
         attn = np.transpose(attn, axes=(0, 3, 2, 1))
-        attn = self.mask(attn, value_len, mode="sum")
+        attn = mask(inputs=attn, seq_len=value_len, mode="sum")
         attn = np.transpose(attn, axes=(0, 3, 2, 1))
         # Pass through softmax
         attn = tf.keras.activations.softmax(attn)

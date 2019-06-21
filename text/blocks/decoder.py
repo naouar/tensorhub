@@ -145,7 +145,7 @@ class AttentionDecoder(keras.Model):
     
     def initialize_hidden_state(self):
         """Initialize hidden state for the decoder.
-        
+
         Returns:
             tensor -- Returns initial hidden state for the decoder.
         """
