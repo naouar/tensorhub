@@ -120,7 +120,7 @@ class SelfAttention(keras.layers.Layer):
         output_seq = np.dot(attn, value_seq, axes=[3, 2])
         output_seq = np.transpose(output_seq, axes=(0, 3, 2, 1))
         output_seq = np.reshape(output_seq, newshape=(-1, np.shape(output_seq)[1], self.output_dim))
-        output_seq = self.mask(output_seq, query_len, "mul")
+        output_seq = mask(inputs=output_seq, seq_len=query_len, mode="mul")
         return output_seq
     
     def compute_output_shape(self, input_shape):

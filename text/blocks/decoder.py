@@ -33,7 +33,7 @@ class Decoder(keras.Model):
         Raises:
             ValueError: Raise error when wrong model name is passed.
         """
-        super(Decoder, self).__init__()
+        super(keras.Model, self).__init__()
         self.batch_sz = batch_sz
         self.dec_units = dec_units
         if learn_embedding == True:
@@ -99,7 +99,7 @@ class AttentionDecoder(keras.Model):
         Raises:
             ValueError: Raise error when wrong model name is passed.
         """
-        super(Decoder, self).__init__()
+        super(keras.Model, self).__init__()
         self.batch_sz = batch_sz
         self.dec_units = dec_units
         if learn_embedding == True:

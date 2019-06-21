@@ -18,7 +18,7 @@ from text.blocks.embeddings import Embeddings
 class SimpleTextClassification(keras.Model):
     """Simple text classification model implementation using recurrent neural networks."""
 
-    def __init__(self, vocab_size, num_classes, model_name="lstm", bidir=False, max_seq_length=256, num_nodes=[256, 512], learn_embedding=True, embedding_dim=300, embedding_matrix=None):
+    def __init__(self, vocab_size, num_classes, model_name="lstm", bidir=False, max_seq_length=256, num_nodes=None, learn_embedding=True, embedding_dim=300, embedding_matrix=None):
         """Text classification using some basic standard recurrent neural network architectures.
         
         Arguments:
@@ -36,6 +36,7 @@ class SimpleTextClassification(keras.Model):
         """
         super(SimpleTextClassification, self).__init__()
         self.embedding = Embeddings.EmbeddingLayer(vocab_size=vocab_size, max_seq_length=max_seq_length, embedding_dim=embedding_dim, learn_embedding=learn_embedding, embedding_matrix=embedding_matrix)
+        self.num_nodes = num_nodes if num_nodes != None else [256, 512]
         # Recurrent layer
         if bidir == False:
             if model_name == "lstm":
@@ -48,8 +49,8 @@ class SimpleTextClassification(keras.Model):
             elif model_name == "gru":
                 self.main_layer = keras.layers.Bidirectional(keras.layers.GRU(units=num_nodes[0]))
         # Dense layer
-        self.dense_layer1 = keras.layers.Dense(units=num_nodes[1], activation="relu")
-        self.dense_layer2 = keras.layers.Dense(units=num_nodes[1], activation="relu")
+        self.dense_layer1 = keras.layers.Dense(units=self.num_nodes[1], activation="relu")
+        self.dense_layer2 = keras.layers.Dense(units=self.num_nodes[1], activation="relu")
         # Final output layer with softmax/sigmoid
         if num_classes > 1:
             self.output_layer = keras.layers.Dense(units=num_classes, activation="softmax")
@@ -77,15 +78,18 @@ class SimpleTextClassification(keras.Model):
 class TextCNN(keras.Model):
     """Text classification using 2D convolutional neural networks."""
 
-    def __init__(self, vocab_size, num_classes, max_length=512, filters=[128, 128], kernals=[5, 5], strides=[2, 2], drop_rate=0.4, learn_embedding=True, embedding_dim=300, embedding_matrix=None):
-        super(TextCNN, self).__init__()
+    def __init__(self, vocab_size, num_classes, max_length=512, filters=None, kernals=None, strides=None, drop_rate=0.4, learn_embedding=True, embedding_dim=300, embedding_matrix=None):
+        super(keras.Model, self).__init__()
+        self.filters = filters if filters != None else [128, 128]
+        self.kernals = kernals if kernals != None else [5, 5]
+        self.strides = strides if strides != None else [2, 2]
         # Embedding
         self.embedding = Embeddings.EmbeddingLayer(vocab_size=vocab_size, max_seq_length=max_seq_length, embedding_dim=embedding_dim, learn_embedding=learn_embedding, embedding_matrix=embedding_matrix)
         self.reshape_layer = keras.layers.Reshape((max_length, embed_dim, 1))
-        self.conv_layer1 = keras.layers.Conv2D(filters=filters[0], kernel_size=(kernals[0]), activation=activation)
-        self.pool_layer1 = keras.layers.MaxPool2D(pool_size=max_length-filters[0]+1, strides=(strides[0]))
-        self.conv_layer2 = keras.layers.Conv2D(filters=filters[1], kernel_size=(kernals[1]), activation=activation)
-        self.pool_layer2 = keras.layers.MaxPool2D(pool_size=max_length-filters[1]+1, strides=(strides[1]))
+        self.conv_layer1 = keras.layers.Conv2D(filters=self.filters[0], kernel_size=(self.kernals[0]), activation=activation)
+        self.pool_layer1 = keras.layers.MaxPool2D(pool_size=max_length-filters[0]+1, strides=(self.strides[0]))
+        self.conv_layer2 = keras.layers.Conv2D(filters=self.filters[1], kernel_size=(self.kernals[1]), activation=activation)
+        self.pool_layer2 = keras.layers.MaxPool2D(pool_size=max_length-filters[1]+1, strides=(self.strides[1]))
         self.flatten_layer = keras.layers.Flatten()
         self.dropout_layer = keras.layers.Dropout(rate=drop_rate)
         self.output_layer = keras.layers.Dense(units=num_classes, activation=output_activation)
