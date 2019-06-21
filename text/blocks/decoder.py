@@ -7,8 +7,6 @@
 # Load packages
 import tensorflow as tf
 from tensorflow import keras
-
-# Import TensorMine Lego Block
 from attention import BahdanauAttention
 
 
@@ -62,20 +60,12 @@ class Decoder(keras.Model):
             tensor, tensor -- Returns decoded output from the decoder and hidden state of the decoder.
         """
         x = self.embedding(x)
-        output, state = self.decoder_layer(x, initial_state=hidden)
+        output, hidden_state = self.decoder_layer(x, initial_state=hidden)
         # Reshape output
         output = tf.reshape(output, (-1, output.shape[2]))
         # Pass through fully connected layer
         x = self.fc(output)
-        return x, state
-    
-    def initialize_hidden_state(self):
-        """Initialize hidden state for the decoder.
-        
-        Returns:
-            tensor -- Returns initial hidden state for the decoder.
-        """
-        return tf.zeros((self.batch_sz, self.dec_units))
+        return x, hidden_state
 
 
 class AttentionDecoder(keras.Model):
@@ -106,17 +96,17 @@ class AttentionDecoder(keras.Model):
         else:
             # Use pre-trained embeddings like glove
             self.embedding = keras.layers.Embedding(input_dim=tar_vocab_size, output_dim=embedding_dim, weights=[embedding_matrix], trainable=False, input_length=max_length)
+        # Attention layer
+        self.attention = BahdanauAttention(self.dec_units)
         # Decoder
         if name == "lstm":
-            self.decoder_layer = keras.layers.LSTM(self.dec_units, return_sequences=True, return_state=True, recurrent_initializer="glorot_uniform")
+            self.decoder_layer = keras.layers.LSTM(self.dec_units, return_sequences=True, return_state=False, recurrent_initializer="glorot_uniform")
         elif name == "gru":
-            self.decoder_layer = keras.layers.GRU(self.dec_units, return_sequences=True, return_state=True, recurrent_initializer="glorot_uniform")
+            self.decoder_layer = keras.layers.GRU(self.dec_units, return_sequences=True, return_state=False, recurrent_initializer="glorot_uniform")
         else:
             raise ValueError("Wrong encoder type passed! {}".format(encoder))
         # Dense layer
         self.fc = keras.layers.Dense(tar_vocab_size)
-        # Attention layer
-        self.attention = BahdanauAttention(dec_units)
 
     def call(self, x, hidden, enc_output):
         """Forward pass over the network.
@@ -130,23 +120,15 @@ class AttentionDecoder(keras.Model):
             tensor, tensor, tensor -- Returns decoded output from the decoder, hidden state of the decoder, attention weights.
         """
         # Attention on encoder output
-        context_vector, attention_weights = self.attention(hidden, enc_output)
+        context_vector = self.attention(hidden, enc_output)
         # Get embeddings
         x = self.embedding(x)
         # Residual connection between attention and target sequence
         x = tf.concat([tf.expand_dims(context_vector, 1), x], axis=-1)
         # Passing the concatenated vector to the decoder
-        output, state = self.decoder_layer(x)
+        output = self.decoder_layer(x)
         # Reshape output
         output = tf.reshape(output, (-1, output.shape[2]))
         # Pass through fully connected layer
         x = self.fc(output)
-        return x, state, attention_weights
-    
-    def initialize_hidden_state(self):
-        """Initialize hidden state for the decoder.
-
-        Returns:
-            tensor -- Returns initial hidden state for the decoder.
-        """
-        return tf.zeros((self.batch_sz, self.dec_units))
+        return x
