@@ -1,16 +1,23 @@
 # Ignore pyc files
 __pycache__
+.cache/
 
-# Ignore vscode setting files
+# Python egg metadata, regenerated from source files by setuptools.
+/*.egg-info
+.eggs/
+
+# PyPI distribution artifacts.
+build/
+dist/
+
+# Tests
+.pytest_cache/
+
+# Vs-Code project files
 *.vscode
 
 # Ignore jupyter cheskpoints
 *.ipynb_checkpoints
 
-# Ignore mac files
+# Ignore OS files
 *.DS_Store
-
-# Ignore data files
-*.json
-*.csv
-*.tsv
