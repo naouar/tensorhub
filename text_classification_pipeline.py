@@ -5,8 +5,6 @@
 
 
 # Load packages
-import os
-import sys
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -15,9 +13,9 @@ from sklearn.model_selection import train_test_split
 
 # Custom imports
 from text.blocks.embeddings import Embeddings
-from text.cooked_models.classifier import SimpleTextClassification, TextCNN
+from text.cooked_models.classifier import SimpleTextClassification
 
-"""Multiclass Text Classification on 'News Healines' Dataset."""
+# Multiclass Text Classification on 'News Healines' Dataset
 
 # DATA PREPRATION
 #
