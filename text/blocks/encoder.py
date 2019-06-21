@@ -59,8 +59,8 @@ class Encoder(keras.Model):
             tensor, tensor -- Returns output and hidden state tensor from the encoder.
         """
         x = self.embedding(x)
-        output, state = self.encoder_layer(x, initial_state=hidden)
-        return output, state
+        output, hidden_state = self.encoder_layer(x, initial_state=hidden)
+        return output, hidden_state
 
     def initialize_hidden_state(self):
         """Initialize encoder hidden state.
