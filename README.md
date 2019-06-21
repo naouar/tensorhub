@@ -5,7 +5,7 @@ The core open source library to help you develop and train ML models easy and fa
 
 ![TensorMine](__data__/header.png)
 
-# How to use TensorMine ?
+# How to use TensorMine
 
 `TensorMine` is a global collection of `Lego blocks` for Neutral Networks. You can use it as you like. Only your creativity can stop you from making your own master piece. `TensorMine` gives you the freedom to design your neural architecture / solution and not worry about it's components.
 
@@ -14,7 +14,7 @@ Our aim is to provide you enough interlocking building blocks that you can build
 We also provide a set of cooked models that can be used directly with a single method call in it's default configuration or with a custom configuration. Internally these models also use `TensorMine`'s neural lego blocks to implement all architectures.
 
 
-# Why TensorFlow ?
+# Why TensorFlow
 TensorFlow is an end-to-end open source platform for machine learning. It has a comprehensive, flexible ecosystem of tools, libraries and community resources that lets researchers push the state-of-the-art in ML and developers easily build and deploy ML powered applications.
 
 **Easy model building**
@@ -31,7 +31,7 @@ A simple and flexible architecture to take new ideas from concept to code, to st
 **[Build, deploy, and experiment easily with TensorFlow](https://www.tensorflow.org/)**
 
 
-## How To Code in TensorFlow 2.0?
+## How To Code in TensorFlow 2.0
 
 **Approach 1: Sequential/Functional Interface**
 
@@ -81,7 +81,7 @@ model = MyModel()
 *We prefer Subclassing to implement all our models/building blocks since it gives more flexibility and control for advanced research.*
 
 
-# Whats cooking ?
+# Whats cooking Inside
 
 + Natural Language Processing
     + Cooked Models:
