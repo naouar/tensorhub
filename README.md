@@ -1,17 +1,17 @@
-# TensorMine
+# TensorHub
 **Models Implemented in TensorFlow 2.0** (*Under active development.*)
 
 The core open source library to help you develop and train ML models easy and fast as never before.
 
-![TensorMine](__data__/header.png)
+![TensorHub](__data__/header.png)
 
-# How to use TensorMine
+# How to use TensorHub
 
-`TensorMine` is a global collection of `Lego blocks` for Neutral Networks. You can use it as you like. Only your creativity can stop you from making your own master piece. `TensorMine` gives you the freedom to design your neural architecture / solution and not worry about it's components.
+`TensorHub` is a global collection of `Lego blocks` for Neutral Networks. You can use it as you like. Only your creativity can stop you from making your own master piece. `TensorHub` gives you the freedom to design your neural architecture / solution and not worry about it's components.
 
 Our aim is to provide you enough interlocking building blocks that you can build any neural architecture from basic to advance in less than `15 minutes` with less than `30 lines` of codes in `TensorFlow 2.0`.
 
-We also provide a set of cooked models that can be used directly with a single method call in it's default configuration or with a custom configuration. Internally these models also use `TensorMine`'s neural lego blocks to implement all architectures.
+We also provide a set of cooked models that can be used directly with a single method call in it's default configuration or with a custom configuration. Internally these models also use `TensorHub`'s neural lego blocks to implement all architectures.
 
 
 # Why TensorFlow
