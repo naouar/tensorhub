@@ -86,20 +86,20 @@ model = MyModel()
 + Natural Language Processing
     + Cooked Models:
         + Text Classification
-            * RNN
-            * LSTM
-            * GRU
+            + RNN
+            + LSTM
+            + GRU
         + Neural Machine Translation
-            * GRU (w/ or w/o Attention)
-            * LSTM (w/ or w/o Attention)
+            + GRU (w/ or w/o Attention)
+            + LSTM (w/ or w/o Attention)
     + Building Blocks:
         + Attention
-            * Self-Attention
-            * Bahdanau Attention
+            + Self-Attention
+            + Bahdanau Attention
         + Encoder - Decoder
-            * RNN (w/ or w/o Attention)
-            * GRU (w/ or w/o Attention)
-            * LSTM (w/ or w/o Attention)
+            + RNN (w/ or w/o Attention)
+            + GRU (w/ or w/o Attention)
+            + LSTM (w/ or w/o Attention)
 
 - - - -
 
