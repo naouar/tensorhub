@@ -1,4 +1,4 @@
-""" 
+"""
 @Author: Kumar Nityan Suman
 @Date: 2019-05-28 02:56:59
 """
@@ -96,7 +96,7 @@ reverse_class_index = dict(zip(index, classes))
 y_train = [class_index[label] for label in y_train]
 y_test = [class_index[label] for label in y_test]
 
-# Convert to categorical 
+# Convert to categorical
 y_train = keras.utils.to_categorical(y_train, num_classes=len(classes))
 y_test = keras.utils.to_categorical(y_test, num_classes=len(classes))
 
