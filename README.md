@@ -11,8 +11,12 @@ The core open source library to help you develop and train ML models easy and fa
 
 Our aim is to provide you enough interlocking building blocks that you can build any neural architecture from basic to advance in less than `15 minutes` with less than `30 lines` of codes in `TensorFlow 2.0`.
 
-We also provide a set of cooked models that can be used directly with a single method call in it's default configuration or with a custom configuration. Internally these models also use `TensorHub`'s neural lego blocks to implement all architectures.
+`TensorHub or THub` for short, is a library of deep learning models and neural lego blocks designed to make deep learning more accessible and accelerate ML research. We provide a set of cooked models that can be used directly with a single call in it's default configuration or with a custom configuration. We provide a wide range of lego like neural interlocking blocks to so that you can build more and worry less.
 
+
+```
+THub is actively used and maintained. We're eager to collaborate with you too, so feel free to open an issue on GitHub or send along a pull request (see our contribution doc).
+```
 
 # Why TensorFlow
 TensorFlow is an end-to-end open source platform for machine learning. It has a comprehensive, flexible ecosystem of tools, libraries and community resources that lets researchers push the state-of-the-art in ML and developers easily build and deploy ML powered applications.
