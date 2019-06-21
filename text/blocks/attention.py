@@ -57,6 +57,7 @@ class SelfAttention(keras.layers.Layer):
         # Build the layer
         super(MultiHeadAttention, self).build(input_shape)
     
+    @staticmethod
     def mask(self, inputs, seq_len, mode="sum"):
         """Mask input tensor.
         
