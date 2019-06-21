@@ -26,7 +26,7 @@ class SelfAttention(keras.layers.Layer):
         self.num_head = num_head
         self.head_size = head_size
         self.output_dim = self.num_head * self.head_size
-        super(MultiHeadAttention, self).__init__()
+        super(SelfAttention, self).__init__()
     
     def build(self, input_shape):
         """Initialize input dependent variables.
@@ -133,40 +133,41 @@ class SelfAttention(keras.layers.Layer):
         return (input_shape[0][0], input_shape[0][1], self.output_dim)
 
 
-class BahdanauAttention(keras.Model):
+class BahdanauAttention(keras.layers.Layer):
     """Bahdanau Attention Implementation. Most prominantly use in Neural Machine Translation."""
 
-    def __init__(self, units=10):
-        """Class constructors to initialize input independent variables.
-        
-        Keyword Arguments:
-            units {int} -- Width of the attention layer. (default: {10})
-        """
+    def __init__(self, num_output):
+        """Class constructors to initialize input independent variables."""
         super(BahdanauAttention, self).__init__()
-        self.W1 = keras.layers.Dense(units)
-        self.W2 = keras.layers.Dense(units)
-        self.V = keras.layers.Dense(1)
+        self.num_outputs = num_outputs
 
-    def call(self, query, values):
+    def build(self, input_shape):
+        """Initialize input dependent variables.
+        
+        Arguments:
+            input_shape {tensor} -- Input tensor shape.
+        """
+        self.W1 = self.add_variable("weight1", shape=(int(input_shape[-1]), self.num_outputs)))
+        self.W2 = self.add_variable("weight1", shape=(int(input_shape[-1], self.num_outputs))
+        self.V = self.add_variable("weight1", shape=(1, int(input_shape[-1])))
+
+    def call(self, query, value):
         """Forward pass over the neural network.
         
         Arguments:
-            query {tensor} -- Input sequence tensor.
-            values {tensor} -- Input value tensor.
+            query {tensor} -- Encoder hidden state output.
+            value {tensor} -- Decoder input sequence.
         
         Returns:
-            tensor, tensor -- Contex vector and attention weights.
+            tensor -- Contex vector.
         """
-        # Hidden shape == (batch_size, hidden size)
-        # Hidden shape with_time_axis shape == (batch_size, 1, hidden size)
-        hidden_with_time_axis = tf.expand_dims(query, 1)
+        hidden_state = tf.expand_dims(query, 1)
 
-        score = self.V(keras.activations.tanh(self.W1(values) + self.W2(hidden_with_time_axis)))
+        score = self.V(keras.activations.tanh(tf.matmul(self.W1, value) + tf.matmul(self.W2, hidden_state)))
 
         # Compute attention weights
         attention_weights = tf.nn.softmax(score, axis=1)
 
         # Create context vector
-        context_vector = attention_weights * values
-        context_vector = tf.reduce_sum(context_vector, axis=1)
-        return context_vector, attention_weights
+        context_vector = tf.reduce_sum(attention_weights * value, axis=1)
+        return context_vector
