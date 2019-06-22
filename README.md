@@ -15,9 +15,8 @@ Our aim is to provide you enough interlocking building blocks that you can build
 
 
 ```
-THub is actively used and maintained. 
-
-We're eager to collaborate with you too, so feel free to open an issue on GitHub or send along a pull request (see our contribution doc).
+We're eager to collaborate with you too,
+so feel free to open an issue on GitHub or send along a pull request.
 ```
 
 # Why TensorFlow
