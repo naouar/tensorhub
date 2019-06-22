@@ -14,7 +14,7 @@ with open("README.md", mode="r") as fh:
 # Create setup
 setuptools.setup(
     name="tensorhub",
-    version="1.0-alpha0",
+    version="1.0-alpha1",
     author="Kumar Nityan Suman",
     author_email="nityan.suman@gmail.com",
     description="Library of deep learning models and datasets designed to make deep learning more accessible and accelerate ML research.",
