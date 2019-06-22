@@ -3,7 +3,7 @@
 
 The core open source library to help you develop and train ML models easy and fast as never before.
 
-![TensorHub](__data__/header.png)
+![TensorHub](data/header.png)
 
 ## How to use TensorHub
 
