@@ -129,6 +129,13 @@ class MyDenseLayer(tf.keras.layers.Layer):
 layer = MyDenseLayer(10)
 ```
 
+## How to use TensorHub
+
++ [Text Classifier Example](run_text_classification.py)
+
+*Lot more coming your way. Stay put.*
+
+
 ## Whats cooking Inside
 
 + Natural Language Processing
