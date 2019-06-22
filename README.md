@@ -149,10 +149,10 @@ layer = MyDenseLayer(10)
             + RNN
             + GRU
             + LSTM
-- - - -
 
-*Any suggestions ??? Let's talk.*
+
+## Let's Work Together
 
 Drop me an e-mail (nityan.suman@gmail.com) or connect with me on [Linkedin](https://linkedin.com/in/kumar-nityan-suman/) to work together of an awesome project.
 
-If you like the work I do, show your appreciation by "FORK", "START", or "SHARE".
+If you like the work I do, show your appreciation by "FORK", "STAR", or "SHARE".
